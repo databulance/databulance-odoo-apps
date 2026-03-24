@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="payment_provider_yookassa" model="payment.provider">
+        <field name="name">YooKassa</field>
+        <field name="code">yookassa</field>
+        <field name="is_published">True</field>
+    </record>
+</odoo>

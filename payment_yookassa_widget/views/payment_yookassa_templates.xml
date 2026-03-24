@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!-- REDIRECT FORM — auto-submitted by Odoo payment JS -->
+<template id="redirect_form" name="YooKassa Redirect Form">
+    <form id="o_payment_redirect_form" method="get"
+          t-att-action="checkout_url">
+        <input type="hidden" name="token"
+               t-att-value="confirmation_token"/>
+        <input type="hidden" name="tx_ref"
+               t-att-value="tx_ref"/>
+        <input type="hidden" name="return_url"
+               t-att-value="return_url"/>
+    </form>
+</template>
+
+
+<!-- CHECKOUT PAGE — standalone, no Odoo frontend bundles -->
+<template id="checkout_page" name="YooKassa Checkout">
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Payment — YooKassa</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .yk-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+            width: 100%;
+            max-width: 480px;
+            padding: 32px 28px;
+        }
+        .yk-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .yk-header h1 {
+            font-size: 20px;
+            color: #1a1a1a;
+            margin-bottom: 6px;
+        }
+        .yk-header p { font-size: 14px; color: #888; }
+        #yk-widget-container { min-height: 200px; }
+        .yk-loading {
+            text-align: center;
+            padding: 40px 0;
+            color: #888;
+            font-size: 14px;
+        }
+        .yk-error {
+            background: #fff3f3;
+            border: 1px solid #fca5a5;
+            border-radius: 8px;
+            padding: 16px;
+            color: #b91c1c;
+            font-size: 14px;
+            display: none;
+        }
+        .yk-back {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #875A7B;
+            text-decoration: none;
+        }
+        .yk-back:hover { text-decoration: underline; }
+        .yk-footer {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 11px;
+            color: #bbb;
+        }
+        .yk-footer a { color: #875A7B; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="yk-card">
+        <div class="yk-header">
+            <h1>Complete Payment</h1>
+            <p>Secure payment powered by YooKassa</p>
+        </div>
+
+        <div id="yk-error" class="yk-error"></div>
+
+        <div id="yk-loading" class="yk-loading">
+            Loading payment form&#8230;
+        </div>
+
+        <div id="yk-widget-container"></div>
+
+        <a href="/shop/payment" class="yk-back">&#8592; Back to payment options</a>
+
+        <div class="yk-footer">
+            Powered by
+            <a href="https://databulance.com" target="_blank">Databulance</a>
+            YooKassa Widget for Odoo 19
+        </div>
+    </div>
+
+    <script src="https://yookassa.ru/checkout-widget/v1/checkout-widget.js"/>
+    <script>
+    (function() {
+        var token = '<t t-esc="token"/>';
+        var returnUrl = '<t t-esc="return_url"/>';
+
+        function showError(msg) {
+            document.getElementById('yk-loading').style.display = 'none';
+            var el = document.getElementById('yk-error');
+            el.textContent = (msg || 'Payment initialization failed.')
+                + ' Please go back and try again.';
+            el.style.display = 'block';
+        }
+
+        if (!token) { showError('No payment token received.'); return; }
+
+        if (!window.YooMoneyCheckoutWidget) {
+            showError('Could not load payment widget.');
+            return;
+        }
+
+        document.getElementById('yk-loading').style.display = 'none';
+
+        var checkout = new window.YooMoneyCheckoutWidget({
+            confirmation_token: token,
+            return_url: returnUrl,
+            customization: {
+                colors: { control_primary: '#875A7B' }
+            },
+            error_callback: function(err) {
+                showError('Payment error: ' + (err.type || JSON.stringify(err)));
+            }
+        });
+
+        checkout.render('yk-widget-container').catch(function(err) {
+            showError('');
+        });
+    })();
+    </script>
+</body>
+</html>
+</template>
+
+</odoo>

@@ -1,0 +1,128 @@
+<section style="font-family:sans-serif;max-width:800px;margin:0 auto;padding:24px;">
+
+  <div style="background:#1a0a2e;border-radius:12px;padding:40px 32px;text-align:center;margin-bottom:32px;">
+    <h1 style="color:#ffffff;font-size:32px;margin:0 0 12px;">YooKassa Payment Widget</h1>
+    <p style="color:#875A7B;font-size:16px;margin:0 0 8px;font-family:monospace;">
+      Embedded checkout · No redirects · Odoo 19
+    </p>
+    <p style="color:rgba(255,255,255,0.6);font-size:14px;margin:0;">
+      Accept YooKassa payments directly on your Odoo website
+    </p>
+  </div>
+
+  <h2 style="color:#1a0a2e;font-size:20px;border-bottom:2px solid #875A7B;padding-bottom:8px;">
+    What is this module?
+  </h2>
+  <p style="color:#374151;line-height:1.7;">
+    YooKassa Payment Widget integrates the YooKassa embedded checkout widget into Odoo 19.
+    Unlike redirect-based integrations, the payment form renders <strong>inline on your page</strong>
+    — customers never leave your website. Works with Odoo e-commerce, custom payment flows,
+    and any website built on Odoo.
+  </p>
+
+  <h2 style="color:#1a0a2e;font-size:20px;border-bottom:2px solid #875A7B;padding-bottom:8px;margin-top:32px;">
+    Key Features
+  </h2>
+  <table style="width:100%;border-collapse:collapse;font-size:14px;">
+    <tr style="background:#f9fafb;">
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;width:200px;">Embedded widget</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">YooKassa checkout renders inline — no redirects, no popups. Customers pay without leaving your site.</td>
+    </tr>
+    <tr>
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;">Idempotent payments</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">Safe retries — if a payment exists and is pending, the same token is reused. No duplicate charges.</td>
+    </tr>
+    <tr style="background:#f9fafb;">
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;">Webhook processing</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">Receives YooKassa event notifications at <code>/payment/yookassa/webhook</code>. Automatically updates transaction state.</td>
+    </tr>
+    <tr>
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;">Status sync</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">On return from payment, syncs status directly from YooKassa API — no stale state.</td>
+    </tr>
+    <tr style="background:#f9fafb;">
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;">Basic receipt</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">Sends a basic prepayment receipt to YooKassa. Pulls line items from sale order when available.</td>
+    </tr>
+    <tr>
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;">VAT code mapping</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">Automatically maps Odoo tax rates (20%, 10%, 0%) to YooKassa VAT codes.</td>
+    </tr>
+    <tr style="background:#f9fafb;">
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;">Odoo 19 compatible</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">Built specifically for Odoo 19. Correct MRO guards to avoid conflicts with other YooKassa modules.</td>
+    </tr>
+  </table>
+
+  <h2 style="color:#1a0a2e;font-size:20px;border-bottom:2px solid #875A7B;padding-bottom:8px;margin-top:32px;">
+    Payment Flow
+  </h2>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px;">
+    <div style="flex:1;min-width:140px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px;text-align:center;">
+      <div style="font-size:22px;margin-bottom:6px;">1</div>
+      <div style="font-weight:600;font-size:13px;">Odoo creates payment</div>
+      <div style="font-size:12px;color:#6b7280;margin-top:4px;">Transaction initiated at checkout</div>
+    </div>
+    <div style="flex:1;min-width:140px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px;text-align:center;">
+      <div style="font-size:22px;margin-bottom:6px;">2</div>
+      <div style="font-weight:600;font-size:13px;">Widget renders</div>
+      <div style="font-size:12px;color:#6b7280;margin-top:4px;">Inline on /payment/yookassa/checkout</div>
+    </div>
+    <div style="flex:1;min-width:140px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px;text-align:center;">
+      <div style="font-size:22px;margin-bottom:6px;">3</div>
+      <div style="font-weight:600;font-size:13px;">Customer pays</div>
+      <div style="font-size:12px;color:#6b7280;margin-top:4px;">Card, SBP, digital wallets</div>
+    </div>
+    <div style="flex:1;min-width:140px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px;text-align:center;">
+      <div style="font-size:22px;margin-bottom:6px;">4</div>
+      <div style="font-weight:600;font-size:13px;">Odoo updated</div>
+      <div style="font-size:12px;color:#6b7280;margin-top:4px;">Via webhook + return sync</div>
+    </div>
+  </div>
+
+  <h2 style="color:#1a0a2e;font-size:20px;border-bottom:2px solid #875A7B;padding-bottom:8px;margin-top:32px;">
+    Configuration
+  </h2>
+  <ol style="color:#374151;line-height:2;font-size:14px;">
+    <li>Install the module</li>
+    <li>Go to <strong>Accounting → Configuration → Payment Providers → YooKassa</strong></li>
+    <li>Enter your <strong>Shop ID</strong> and <strong>Secret Key</strong> from the YooKassa merchant dashboard</li>
+    <li>Set the webhook URL in YooKassa dashboard: <code>https://yourdomain.com/payment/yookassa/webhook</code></li>
+    <li>Enable the provider and publish it on your website</li>
+  </ol>
+
+  <h2 style="color:#1a0a2e;font-size:20px;border-bottom:2px solid #875A7B;padding-bottom:8px;margin-top:32px;">
+    Pro Version
+  </h2>
+  <div style="background:#f3e8ff;border:1px solid #c084fc;border-radius:8px;padding:20px;margin-bottom:24px;">
+    <p style="color:#4a1c6e;font-weight:600;margin:0 0 8px;">
+      Need 54-ФЗ completion receipts or post-payment onboarding?
+    </p>
+    <p style="color:#6b21a8;font-size:14px;margin:0 0 12px;">
+      <strong>YooKassa Widget Pro</strong> adds:
+      automated 54-ФЗ completion receipts,
+      email verification flow,
+      portal account creation,
+      and priority support.
+      Contact <a href="mailto:support@databulance.com">support@databulance.com</a>
+    </p>
+  </div>
+
+  <h2 style="color:#1a0a2e;font-size:20px;border-bottom:2px solid #875A7B;padding-bottom:8px;margin-top:32px;">
+    Dependencies
+  </h2>
+  <p style="color:#374151;font-size:14px;">
+    <code style="background:#f3f4f6;padding:2px 6px;border-radius:4px;">payment</code>
+    <code style="background:#f3f4f6;padding:2px 6px;border-radius:4px;">website</code>
+  </p>
+
+  <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:24px;margin-top:32px;text-align:center;">
+    <p style="color:#374151;margin:0 0 8px;font-weight:600;">Published by Databulance</p>
+    <p style="color:#6b7280;font-size:13px;margin:0;">
+      Odoo custom development &amp; Machine Learning solutions<br/>
+      <a href="mailto:info@databulance.com" style="color:#875A7B;">info@databulance.com</a>
+      · <a href="mailto:support@databulance.com" style="color:#875A7B;">support@databulance.com</a>
+    </p>
+  </div>
+
+</section>

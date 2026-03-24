@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="demo_category_consulting" model="booking_lance.service.category">
+        <field name="name">Consulting</field>
+        <field name="sequence">1</field>
+    </record>
+
+    <record id="demo_category_education" model="booking_lance.service.category">
+        <field name="name">Education</field>
+        <field name="sequence">2</field>
+    </record>
+
+    <record id="demo_service_odoo" model="booking_lance.service">
+        <field name="name">Odoo Consulting Session</field>
+        <field name="duration">1.0</field>
+        <field name="buffer_time">0.25</field>
+        <field name="max_capacity">1</field>
+        <field name="cancellation_hours">24</field>
+        <field name="reschedule_hours">24</field>
+        <field name="payment_mode">free</field>
+        <field name="category_id" ref="demo_category_consulting"/>
+        <field name="description">
+            &lt;p&gt;A focused 1-hour Odoo consulting session.
+            We cover module architecture, debugging,
+            custom fields, and integrations.&lt;/p&gt;
+        </field>
+    </record>
+
+    <record id="demo_service_ml" model="booking_lance.service">
+        <field name="name">ML Project Discovery</field>
+        <field name="duration">1.5</field>
+        <field name="buffer_time">0.25</field>
+        <field name="max_capacity">1</field>
+        <field name="cancellation_hours">24</field>
+        <field name="reschedule_hours">24</field>
+        <field name="allow_recurring">True</field>
+        <field name="payment_mode">free</field>
+        <field name="category_id" ref="demo_category_consulting"/>
+        <field name="description">
+            &lt;p&gt;A 90-minute discovery session to define
+            your ML project scope, data requirements,
+            and pipeline architecture.&lt;/p&gt;
+        </field>
+    </record>
+
+    <record id="demo_service_tutoring" model="booking_lance.service">
+        <field name="name">Python Tutoring Session</field>
+        <field name="duration">1.0</field>
+        <field name="buffer_time">0.0</field>
+        <field name="max_capacity">3</field>
+        <field name="cancellation_hours">12</field>
+        <field name="reschedule_hours">12</field>
+        <field name="allow_recurring">True</field>
+        <field name="allow_waitlist">True</field>
+        <field name="payment_mode">pay_at_session</field>
+        <field name="category_id" ref="demo_category_education"/>
+        <field name="description">
+            &lt;p&gt;Group Python tutoring session.
+            Max 3 students. Covers fundamentals,
+            data science, and Odoo development.&lt;/p&gt;
+        </field>
+    </record>
+</odoo>

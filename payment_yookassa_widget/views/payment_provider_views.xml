@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="payment_provider_form_yookassa" model="ir.ui.view">
+        <field name="name">payment.provider.form.yookassa</field>
+        <field name="model">payment.provider</field>
+        <field name="inherit_id" ref="payment.payment_provider_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='provider_credentials']" position="inside">
+                <group invisible="code != 'yookassa'">
+                    <field name="yookassa_shop_id"
+                           string="Shop ID"
+                           required="code == 'yookassa'"/>
+                    <field name="yookassa_secret_key"
+                           string="Secret Key"
+                           password="True"
+                           required="code == 'yookassa'"/>
+                </group>
+            </xpath>
+            <xpath expr="//group[@name='provider_credentials']" position="after">
+                <div invisible="code != 'yookassa'"
+                     style="padding:8px 0;font-size:13px;color:#666;">
+                    <p>
+                        For support email
+                        <a href="mailto:support@databulance.com">support@databulance.com</a>.
+                        For 54-ФЗ receipts and onboarding,
+                        see <strong>YooKassa Widget Pro</strong>.
+                    </p>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

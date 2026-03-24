@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="payment_transaction_list_yookassa_pro"
+            model="ir.ui.view">
+        <field name="name">
+            payment.transaction.list.yookassa.pro
+        </field>
+        <field name="model">payment.transaction</field>
+        <field name="inherit_id"
+               ref="payment.payment_transaction_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="inside">
+                <field name="yk_completion_receipt_sent"
+                       string="54-ФЗ Receipt"
+                       optional="show"
+                       invisible="provider_code != 'yookassa'"/>
+                <field name="yk_completion_receipt_date"
+                       string="Receipt Date"
+                       optional="hide"
+                       invisible="provider_code != 'yookassa'"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

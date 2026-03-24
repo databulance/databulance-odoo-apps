@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<template id="verify_email_page"
+          name="YooKassa Pro: Verify Your Email">
+    <t t-call="website.layout">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6 text-center">
+                    <div style="font-size:64px;margin-bottom:16px;">
+                        &#128231;
+                    </div>
+                    <h2 class="mb-3">Check your inbox</h2>
+                    <t t-if="resent">
+                        <div class="alert alert-success">
+                            A new verification email has been sent to
+                            <strong><t t-esc="email"/></strong>.
+                        </div>
+                    </t>
+                    <t t-else="">
+                        <p class="text-muted mb-4">
+                            We sent a verification link to
+                            <strong><t t-esc="email"/></strong>.
+                            Click the link in the email to continue.
+                        </p>
+                    </t>
+                    <p class="text-muted small mb-4">
+                        Didn't receive it? Check your spam folder, or
+                        <a t-att-href="
+                            '/payment/yookassa/resend-verify?tx_ref='
+                            + (tx_ref or '')">
+                            resend the verification email
+                        </a>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </t>
+</template>
+
+
+<template id="email_confirm_error"
+          name="YooKassa Pro: Email Confirm Error">
+    <t t-call="website.layout">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6 text-center">
+                    <div style="font-size:64px;margin-bottom:16px;">
+                        &#9888;&#65039;
+                    </div>
+                    <h2 class="mb-3">Verification Failed</h2>
+                    <div class="alert alert-danger"
+                         t-esc="error"/>
+                    <t t-if="tx_ref">
+                        <a t-att-href="
+                            '/payment/yookassa/resend-verify?tx_ref='
+                            + tx_ref"
+                           class="btn btn-primary mt-3">
+                            Resend Verification Email
+                        </a>
+                    </t>
+                </div>
+            </div>
+        </div>
+    </t>
+</template>
+
+
+<template id="set_password_page"
+          name="YooKassa Pro: Create Your Account">
+    <t t-call="website.layout">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <h2 class="mb-1">Create your account</h2>
+                    <p class="text-muted mb-4">
+                        Welcome,
+                        <strong><t t-esc="partner_name"/></strong>!
+                        Set a password to access your account.
+                    </p>
+                    <t t-if="error">
+                        <div class="alert alert-danger"
+                             t-esc="error"/>
+                    </t>
+                    <form method="post"
+                          action="/payment/yookassa/set-password">
+                        <input type="hidden" name="csrf_token"
+                               t-att-value="request.csrf_token()"/>
+                        <input type="hidden" name="tx_ref"
+                               t-att-value="tx_ref"/>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email"
+                                   class="form-control"
+                                   t-att-value="email"
+                                   readonly="readonly"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label"
+                                   for="password">
+                                Password
+                            </label>
+                            <input type="password"
+                                   id="password"
+                                   name="password"
+                                   class="form-control"
+                                   placeholder="At least 8 characters"
+                                   required="required"
+                                   minlength="8"/>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label"
+                                   for="password_confirm">
+                                Confirm Password
+                            </label>
+                            <input type="password"
+                                   id="password_confirm"
+                                   name="password_confirm"
+                                   class="form-control"
+                                   placeholder="Repeat your password"
+                                   required="required"
+                                   minlength="8"/>
+                        </div>
+                        <button type="submit"
+                                class="btn btn-primary w-100">
+                            Create Account &amp; Continue
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </t>
+</template>
+
+</odoo>

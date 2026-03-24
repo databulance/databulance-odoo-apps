@@ -1,0 +1,768 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!-- ================================================================
+     Portal home — add Bookings entry
+================================================================ -->
+<template id="portal_my_home_bl"
+          inherit_id="portal.portal_my_home"
+          name="My Bookings">
+    <xpath expr="//div[hasclass('o_portal_docs')]"
+           position="inside">
+        <t t-call="portal.portal_docs_entry">
+            <t t-set="title">My Bookings</t>
+            <t t-set="url">/my/bookings</t>
+            <t t-set="count" t-value="booking_count"/>
+            <t t-set="icon">/booking_lance/static/description/icon.png</t>
+        </t>
+    </xpath>
+</template>
+
+<!-- ================================================================
+     /booking — Service picker
+================================================================ -->
+<template id="portal_booking_home" name="Book a Session">
+    <t t-call="website.layout">
+        <div class="container py-5" style="max-width:860px;">
+
+            <t t-if="not request.env.user or request.env.user._is_public()">
+                <div class="alert alert-info d-flex align-items-center
+                            justify-content-between mb-4">
+                    <span>
+                        Please log in or create an account to book a session.
+                    </span>
+                    <div class="d-flex gap-2">
+                        <a href="/web/login?redirect=/booking"
+                           class="btn btn-sm btn-bl-primary">
+                            Log In
+                        </a>
+                        <a href="/web/signup?redirect=/booking"
+                           class="btn btn-sm btn-bl-outline">
+                            Sign Up
+                        </a>
+                    </div>
+                </div>
+            </t>
+
+            <t t-if="request.params.get('error')">
+                <div class="alert alert-warning bl-error-banner">
+                    That slot is no longer available.
+                    Please choose another time.
+                </div>
+            </t>
+
+            <div class="text-center mb-5">
+                <h1 class="fw-bold" style="color:#0d1120;">
+                    <t t-out="config.brand_name
+                              if config else 'Book a Session'"/>
+                </h1>
+                <p class="text-muted">
+                    Choose a service to get started.
+                </p>
+            </div>
+
+            <t t-if="services">
+                <div class="row g-3 mb-4">
+                    <t t-foreach="services" t-as="service">
+                        <div class="col-md-6">
+                            <a t-attf-href="/booking/#{service.id}"
+                               class="bl-service-card">
+                                <div class="bl-service-name">
+                                    <t t-out="service.name"/>
+                                </div>
+                                <div class="bl-service-meta mb-2">
+                                    <t t-out="service.duration"/> hr
+                                    <t t-if="service.buffer_time">
+                                        + <t t-out="service.buffer_time"/> hr buffer
+                                    </t>
+                                </div>
+                                <t t-if="service.description">
+                                    <div class="text-muted"
+                                         style="font-size:13px;">
+                                        <t t-out="service.description"
+                                           t-options='{"widget":"html"}'/>
+                                    </div>
+                                </t>
+                                <div class="mt-3">
+                                    <span class="bl-service-badge">
+                                        <t t-out="
+                                            'Free'
+                                            if service.payment_mode == 'free'
+                                            else 'Pay at session'
+                                        "/>
+                                    </span>
+                                    <t t-if="service.allow_recurring">
+                                        <span class="bl-service-badge ms-1"
+                                              style="background:#5c35b5;">
+                                            Recurring available
+                                        </span>
+                                    </t>
+                                </div>
+                            </a>
+                        </div>
+                    </t>
+                </div>
+            </t>
+
+            <t t-if="not services">
+                <div class="text-center py-5 text-muted">
+                    No services available at the moment.
+                    Please check back soon.
+                </div>
+            </t>
+
+        </div>
+    </t>
+</template>
+
+<!-- ================================================================
+     /booking/<service_id> — Slot picker
+================================================================ -->
+<template id="portal_booking_slots" name="Choose a Time">
+    <t t-call="website.layout">
+        <div class="container py-5" style="max-width:720px;">
+
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="/booking">Services</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        <t t-out="service.name"/>
+                    </li>
+                </ol>
+            </nav>
+
+            <h2 class="fw-bold mb-1" style="color:#0d1120;">
+                <t t-out="service.name"/>
+            </h2>
+            <p class="text-muted mb-4">
+                Duration: <t t-out="service.duration"/> hr
+                <t t-if="service.buffer_time">
+                    (+ <t t-out="service.buffer_time"/> hr buffer)
+                </t>
+            </p>
+
+            <t t-if="not slots">
+                <div class="alert alert-info">
+                    No available slots at the moment.
+                    Please check back soon.
+                </div>
+            </t>
+
+            <t t-if="slots">
+                <form action="/booking/review" method="post">
+                    <input type="hidden" name="csrf_token"
+                           t-att-value="request.csrf_token()"/>
+                    <input type="hidden" name="service_id"
+                           t-att-value="service.id"/>
+                    <input type="hidden" name="slot_id"
+                           id="bl-slot-input" value=""/>
+
+                    <t t-foreach="slots_by_date.items()"
+                       t-as="date_slots">
+                        <div class="bl-date-header">
+                            <t t-out="date_slots[0]"/>
+                        </div>
+                        <div class="row g-2 mb-2">
+                            <t t-foreach="date_slots[1]"
+                               t-as="slot">
+                                <div class="col-6 col-md-4">
+                                    <button type="button"
+                                            class="bl-slot-btn"
+                                            t-att-data-slot-id="slot.id">
+                                        <t t-out="slot.start_datetime.strftime('%H:%M')"/>
+                                        <span class="text-muted ms-1"
+                                              style="font-size:11px;">
+                                            —
+                                            <t t-out="slot.end_datetime.strftime('%H:%M')"/>
+                                        </span>
+                                    </button>
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+
+                    <div class="mt-4">
+                        <label class="form-label fw-semibold">
+                            Notes
+                            <span class="text-muted fw-normal">
+                                (optional)
+                            </span>
+                        </label>
+                        <textarea name="notes"
+                                  class="form-control mb-4"
+                                  rows="3"
+                                  placeholder="What would you like to discuss?"/>
+                    </div>
+
+                    <t t-if="service.allow_recurring">
+                        <div class="mb-4">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       id="bl-recurring-toggle"
+                                       name="is_recurring"
+                                       value="1"/>
+                                <label class="form-check-label"
+                                       for="bl-recurring-toggle">
+                                    Make this a recurring booking
+                                </label>
+                            </div>
+                            <div id="bl-recurring-options"
+                                 style="display:none;
+                                        padding:16px;
+                                        background:#f9fafb;
+                                        border-radius:8px;">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">
+                                            Frequency
+                                        </label>
+                                        <select name="recurrence_frequency"
+                                                class="form-select">
+                                            <option value="weekly">
+                                                Weekly
+                                            </option>
+                                            <option value="biweekly">
+                                                Every 2 weeks
+                                            </option>
+                                            <option value="monthly">
+                                                Monthly
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">
+                                            Repeat until
+                                        </label>
+                                        <input type="date"
+                                               name="recurrence_end_date"
+                                               class="form-control"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+
+                    <div class="d-flex gap-3">
+                        <button type="submit"
+                                class="btn btn-bl-primary"
+                                id="bl-review-btn"
+                                disabled="disabled">
+                            Select a time slot
+                        </button>
+                        <a href="/booking"
+                           class="btn btn-bl-outline">
+                            Back
+                        </a>
+                    </div>
+                </form>
+            </t>
+
+        </div>
+
+    <!-- BookingLance inline JS -->
+    <script>
+    (function(){
+        document.addEventListener('DOMContentLoaded', function(){
+            var slotInput = document.getElementById('bl-slot-input');
+            var reviewBtn = document.getElementById('bl-review-btn');
+            if(reviewBtn){ reviewBtn.disabled=true; reviewBtn.style.opacity='0.5'; }
+            document.addEventListener('click', function(e){
+                var btn = e.target.closest ? e.target.closest('.bl-slot-btn') : null;
+                if(!btn) return;
+                e.preventDefault();
+                document.querySelectorAll('.bl-slot-btn').forEach(function(b){
+                    b.classList.remove('selected');
+                    b.style.cssText='';
+                });
+                btn.classList.add('selected');
+                btn.style.cssText='border-color:#9c27b0!important;background:rgba(156,39,176,0.12)!important;color:#9c27b0!important;font-weight:600!important;';
+                if(slotInput) slotInput.value = btn.getAttribute('data-slot-id');
+                if(reviewBtn){
+                    reviewBtn.disabled=false;
+                    reviewBtn.style.opacity='1';
+                    reviewBtn.style.cursor='pointer';
+                    reviewBtn.textContent='Continue to Review';
+                }
+            });
+            document.addEventListener('mouseover', function(e){
+                var btn = e.target.closest ? e.target.closest('.bl-slot-btn.selected') : null;
+                if(btn) btn.style.cssText='border-color:#9c27b0!important;background:rgba(156,39,176,0.12)!important;color:#9c27b0!important;font-weight:600!important;';
+            });
+        });
+    })();
+    </script>
+    </t>
+</template>
+
+<!-- ================================================================
+     /booking/review — Review before confirm
+================================================================ -->
+<template id="portal_booking_review" name="Review Booking">
+    <t t-call="website.layout">
+        <div class="container py-5" style="max-width:600px;">
+
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="/booking">Services</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a t-attf-href="/booking/#{service.id}">
+                            <t t-out="service.name"/>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active">Review</li>
+                </ol>
+            </nav>
+
+            <h2 class="fw-bold mb-4" style="color:#0d1120;">
+                Review Your Booking
+            </h2>
+
+            <div class="bl-review-card">
+                <div class="bl-review-row">
+                    <span class="bl-review-label">Service</span>
+                    <span class="bl-review-value">
+                        <t t-out="service.name"/>
+                    </span>
+                </div>
+                <div class="bl-review-row">
+                    <span class="bl-review-label">Date</span>
+                    <span class="bl-review-value">
+                        <t t-out="slot.start_datetime.strftime('%A, %d %B %Y')"/>
+                    </span>
+                </div>
+                <div class="bl-review-row">
+                    <span class="bl-review-label">Time</span>
+                    <span class="bl-review-value">
+                        <t t-out="slot.start_datetime.strftime('%H:%M')"/>
+                        —
+                        <t t-out="slot.end_datetime.strftime('%H:%M')"/>
+                    </span>
+                </div>
+                <div class="bl-review-row">
+                    <span class="bl-review-label">Duration</span>
+                    <span class="bl-review-value">
+                        <t t-out="service.duration"/> hr
+                    </span>
+                </div>
+                <div class="bl-review-row">
+                    <span class="bl-review-label">Payment</span>
+                    <span class="bl-review-value">
+                        <t t-out="
+                            'Free'
+                            if service.payment_mode == 'free'
+                            else 'Pay at session'
+                        "/>
+                    </span>
+                </div>
+                <t t-if="notes">
+                    <div class="bl-review-row">
+                        <span class="bl-review-label">Notes</span>
+                        <span class="bl-review-value">
+                            <t t-out="notes"/>
+                        </span>
+                    </div>
+                </t>
+            </div>
+
+            <form action="/booking/submit" method="post">
+                <input type="hidden" name="csrf_token"
+                       t-att-value="request.csrf_token()"/>
+                <input type="hidden" name="slot_id"
+                       t-att-value="slot.id"/>
+                <input type="hidden" name="service_id"
+                       t-att-value="service.id"/>
+                <input type="hidden" name="notes"
+                       t-att-value="notes"/>
+                <div class="d-flex gap-3 mt-2">
+                    <button type="submit"
+                            class="btn btn-bl-primary">
+                        Confirm Booking
+                    </button>
+                    <a t-attf-href="/booking/#{service.id}"
+                       class="btn btn-bl-outline">
+                        Change Time
+                    </a>
+                </div>
+            </form>
+
+        </div>
+    </t>
+</template>
+
+<!-- ================================================================
+     /booking/done/<id> — Confirmation
+================================================================ -->
+<template id="portal_booking_done" name="Booking Confirmed">
+    <t t-call="website.layout">
+        <div class="container py-5" style="max-width:600px;">
+
+            <div class="bl-confirm-banner">
+                <div style="font-size:36px;margin-bottom:12px;">
+                    &#10003;
+                </div>
+                <h2>Booking Confirmed</h2>
+                <p class="bl-confirm-ref">
+                    <t t-out="booking.name"/>
+                </p>
+            </div>
+
+            <div class="bl-review-card">
+                <div class="bl-review-row">
+                    <span class="bl-review-label">Service</span>
+                    <span class="bl-review-value">
+                        <t t-out="booking.service_id.name"/>
+                    </span>
+                </div>
+                <div class="bl-review-row">
+                    <span class="bl-review-label">Date</span>
+                    <span class="bl-review-value">
+                        <t t-out="booking.start_datetime.strftime('%A, %d %B %Y')"/>
+                    </span>
+                </div>
+                <div class="bl-review-row">
+                    <span class="bl-review-label">Time</span>
+                    <span class="bl-review-value">
+                        <t t-out="booking.start_datetime.strftime('%H:%M')"/>
+                        —
+                        <t t-out="booking.end_datetime.strftime('%H:%M')"/>
+                    </span>
+                </div>
+                <div class="bl-review-row">
+                    <span class="bl-review-label">Staff</span>
+                    <span class="bl-review-value">
+                        <t t-out="booking.staff_id.name
+                                  if booking.staff_id
+                                  else 'To be assigned'"/>
+                    </span>
+                </div>
+            </div>
+
+            <t t-if="config and config.confirmation_message">
+                <div class="alert alert-light border mb-4">
+                    <t t-out="config.confirmation_message"
+                       t-options='{"widget":"html"}'/>
+                </div>
+            </t>
+
+            <div class="d-flex gap-3 flex-wrap">
+                <a t-attf-href="/booking/ical/#{booking.ical_token}"
+                   class="btn btn-bl-primary">
+                    Download Calendar (.ics)
+                </a>
+                <a href="/my/bookings"
+                   class="btn btn-bl-outline">
+                    My Bookings
+                </a>
+                <a href="/booking"
+                   class="btn btn-bl-outline">
+                    Book Another Session
+                </a>
+            </div>
+
+        </div>
+    </t>
+</template>
+
+<!-- ================================================================
+     /my/bookings — Client dashboard
+================================================================ -->
+<template id="portal_my_bookings" name="My Bookings">
+    <t t-call="portal.portal_layout">
+        <t t-set="breadcrumbs_searchbar" t-value="True"/>
+        <t t-call="portal.portal_searchbar">
+            <t t-set="title">My Bookings</t>
+        </t>
+
+        <t t-if="not request.env.user or request.env.user._is_public()">
+                <div class="alert alert-info d-flex align-items-center
+                            justify-content-between mb-4">
+                    <span>
+                        Please log in or create an account to book a session.
+                    </span>
+                    <div class="d-flex gap-2">
+                        <a href="/web/login?redirect=/booking"
+                           class="btn btn-sm btn-bl-primary">
+                            Log In
+                        </a>
+                        <a href="/web/signup?redirect=/booking"
+                           class="btn btn-sm btn-bl-outline">
+                            Sign Up
+                        </a>
+                    </div>
+                </div>
+            </t>
+
+            <t t-if="request.params.get('error')">
+            <div class="alert alert-warning bl-error-banner">
+                <t t-out="request.params.get('error')"/>
+            </div>
+        </t>
+
+        <t t-if="not bookings">
+            <div class="text-center py-5 text-muted">
+                <p>You have no bookings yet.</p>
+                <a href="/booking" class="btn btn-bl-primary">
+                    Book a Session
+                </a>
+            </div>
+        </t>
+
+        <t t-if="upcoming">
+            <h5 class="fw-bold mt-3 mb-3"
+                style="color:#0d1120;">Upcoming</h5>
+            <div class="table-responsive mb-4">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Reference</th>
+                            <th>Service</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="upcoming" t-as="b">
+                            <tr class="bl-booking-row-upcoming">
+                                <td>
+                                    <span style="font-family:monospace;
+                                                 font-size:12px;">
+                                        <t t-out="b.name"/>
+                                    </span>
+                                </td>
+                                <td><t t-out="b.service_id.name"/></td>
+                                <td>
+                                    <t t-out="b.start_datetime.strftime('%d %b %Y')"/>
+                                </td>
+                                <td>
+                                    <t t-out="b.start_datetime.strftime('%H:%M')"/>
+                                </td>
+                                <td>
+                                    <span t-attf-class="badge #{
+                                        'bg-success'
+                                        if b.state == 'confirmed'
+                                        else 'bg-warning text-dark'
+                                    }">
+                                        <t t-out="b.state.title()"/>
+                                    </span>
+                                </td>
+                                <td>
+                                    <a t-attf-href="/booking/reschedule/#{b.id}"
+                                       class="btn btn-sm btn-outline-secondary me-1">
+                                        Reschedule
+                                    </a>
+                                    <form t-attf-action="/booking/cancel/#{b.id}"
+                                          method="post"
+                                          class="d-inline bl-cancel-form">
+                                        <input type="hidden"
+                                               name="csrf_token"
+                                               t-att-value="request.csrf_token()"/>
+                                        <input type="hidden"
+                                               name="reason"
+                                               value="Cancelled by client"/>
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-danger">
+                                            Cancel
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+
+        <t t-if="past">
+            <h5 class="fw-bold mt-3 mb-3"
+                style="color:#6b7280;">Past Sessions</h5>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Reference</th>
+                            <th>Service</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="past" t-as="b">
+                            <tr class="bl-booking-row-past">
+                                <td>
+                                    <span style="font-family:monospace;
+                                                 font-size:12px;">
+                                        <t t-out="b.name"/>
+                                    </span>
+                                </td>
+                                <td><t t-out="b.service_id.name"/></td>
+                                <td>
+                                    <t t-out="b.start_datetime.strftime('%d %b %Y')
+                                              if b.start_datetime
+                                              else '—'"/>
+                                </td>
+                                <td>
+                                    <span t-attf-class="badge #{
+                                        'bg-secondary'
+                                        if b.state == 'done'
+                                        else 'bg-danger'
+                                    }">
+                                        <t t-out="b.state.title()"/>
+                                    </span>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+
+        <div class="mt-4">
+            <a href="/booking" class="btn btn-bl-primary">
+                Book a New Session
+            </a>
+        </div>
+
+    </t>
+</template>
+
+<!-- ================================================================
+     Reschedule page
+================================================================ -->
+<template id="portal_booking_reschedule" name="Reschedule">
+    <t t-call="portal.portal_layout">
+        <h3 class="fw-bold mb-4">Reschedule — <t t-out="booking.name"/></h3>
+        <p class="text-muted mb-4">
+            Current: <strong>
+                <t t-out="booking.start_datetime.strftime('%A %d %B %Y, %H:%M')"/>
+            </strong>
+        </p>
+
+        <t t-if="not slots">
+            <div class="alert alert-info">
+                No alternative slots available at the moment.
+            </div>
+        </t>
+
+        <t t-if="slots">
+            <form action="/booking/reschedule/submit" method="post">
+                <input type="hidden" name="csrf_token"
+                       t-att-value="request.csrf_token()"/>
+                <input type="hidden" name="booking_id"
+                       t-att-value="booking.id"/>
+                <input type="hidden" name="slot_id"
+                       id="bl-slot-input" value=""/>
+
+                <t t-foreach="slots_by_date.items()"
+                   t-as="date_slots">
+                    <div class="bl-date-header">
+                        <t t-out="date_slots[0]"/>
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <t t-foreach="date_slots[1]" t-as="slot">
+                            <div class="col-6 col-md-4">
+                                <button type="button"
+                                        class="bl-slot-btn"
+                                        t-att-data-slot-id="slot.id">
+                                    <t t-out="slot.start_datetime.strftime('%H:%M')"/>
+                                </button>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+
+                <div class="d-flex gap-3 mt-4">
+                    <button type="submit"
+                            class="btn btn-bl-primary"
+                            id="bl-review-btn"
+                            disabled="disabled">
+                        Confirm Reschedule
+                    </button>
+                    <a href="/my/bookings"
+                       class="btn btn-bl-outline">Cancel</a>
+                </div>
+            </form>
+        </t>
+
+    </t>
+</template>
+
+<!-- ================================================================
+     Waitlist pages
+================================================================ -->
+<template id="portal_booking_waitlist" name="Join Waitlist">
+    <t t-call="website.layout">
+        <div class="container py-5" style="max-width:600px;">
+            <div class="alert alert-warning">
+                This slot is currently full.
+                Would you like to join the waitlist?
+            </div>
+            <div class="bl-review-card">
+                <div class="bl-review-row">
+                    <span class="bl-review-label">Service</span>
+                    <span class="bl-review-value">
+                        <t t-out="service.name"/>
+                    </span>
+                </div>
+                <div class="bl-review-row">
+                    <span class="bl-review-label">Date</span>
+                    <span class="bl-review-value">
+                        <t t-out="slot.start_datetime.strftime('%A, %d %B %Y %H:%M')"/>
+                    </span>
+                </div>
+            </div>
+            <form action="/booking/submit" method="post">
+                <input type="hidden" name="csrf_token"
+                       t-att-value="request.csrf_token()"/>
+                <input type="hidden" name="slot_id"
+                       t-att-value="slot.id"/>
+                <input type="hidden" name="service_id"
+                       t-att-value="service.id"/>
+                <input type="hidden" name="notes"
+                       t-att-value="notes"/>
+                <div class="d-flex gap-3">
+                    <button type="submit"
+                            class="btn btn-bl-primary">
+                        Join Waitlist
+                    </button>
+                    <a t-attf-href="/booking/#{service.id}"
+                       class="btn btn-bl-outline">
+                        Choose Another Time
+                    </a>
+                </div>
+            </form>
+        </div>
+    </t>
+</template>
+
+<template id="portal_booking_waitlisted" name="Waitlist Confirmed">
+    <t t-call="website.layout">
+        <div class="container py-5 text-center"
+             style="max-width:600px;">
+            <div class="bl-confirm-banner">
+                <h2>You're on the Waitlist</h2>
+                <p style="color:rgba(255,255,255,0.7);">
+                    We'll notify you by email if a spot opens up
+                    for <t t-out="service.name"/> on
+                    <t t-out="slot.start_datetime.strftime('%A %d %B')"/>.
+                </p>
+            </div>
+            <a href="/booking"
+               class="btn btn-bl-primary me-2">
+                Browse Other Services
+            </a>
+            <a href="/my/bookings"
+               class="btn btn-bl-outline">
+                My Bookings
+            </a>
+        </div>
+    </t>
+</template>
+
+</odoo>

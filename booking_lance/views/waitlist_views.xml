@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bl_waitlist_list" model="ir.ui.view">
+        <field name="name">booking_lance.waitlist.list</field>
+        <field name="model">booking_lance.waitlist</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="state == 'expired'"
+                  decoration-success="state == 'booked'"
+                  decoration-info="state == 'notified'">
+                <field name="position"/>
+                <field name="slot_id"/>
+                <field name="service_id"/>
+                <field name="partner_id"/>
+                <field name="state" widget="badge"
+                       decoration-warning="state == 'waiting'"
+                       decoration-info="state == 'notified'"
+                       decoration-success="state == 'booked'"
+                       decoration-muted="state == 'expired'"/>
+                <field name="notified_at"/>
+                <button name="action_notify_client"
+                        string="Notify Now"
+                        type="object"
+                        icon="fa-bell"
+                        invisible="state != 'waiting'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_bl_waitlist_form" model="ir.ui.view">
+        <field name="name">booking_lance.waitlist.form</field>
+        <field name="model">booking_lance.waitlist</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="slot_id"/>
+                            <field name="service_id"
+                                   readonly="1"/>
+                            <field name="partner_id"/>
+                        </group>
+                        <group>
+                            <field name="position"/>
+                            <field name="state"/>
+                            <field name="notified_at"
+                                   readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_bl_waitlist" model="ir.actions.act_window">
+        <field name="name">Waitlist</field>
+        <field name="res_model">booking_lance.waitlist</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

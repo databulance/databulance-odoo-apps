@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_booking_lance" model="ir.sequence">
+        <field name="name">BookingLance Booking</field>
+        <field name="code">booking_lance.booking</field>
+        <field name="prefix">BL/</field>
+        <field name="padding">5</field>
+        <field name="number_next" eval="False"/>
+        <field name="number_increment">1</field>
+    </record>
+</odoo>

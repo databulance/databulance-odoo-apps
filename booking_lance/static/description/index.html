@@ -1,0 +1,161 @@
+<section style="font-family:sans-serif;max-width:800px;margin:0 auto;padding:24px;">
+
+  <div style="background:#0d1120;border-radius:12px;padding:40px 32px;text-align:center;margin-bottom:32px;">
+    <h1 style="color:#ffffff;font-size:32px;margin:0 0 12px;">BookingLance</h1>
+    <p style="color:#9c27b0;font-size:16px;margin:0 0 8px;font-family:monospace;">
+      Plug-and-play booking system for Odoo 19
+    </p>
+    <p style="color:rgba(255,255,255,0.6);font-size:14px;margin:0;">
+      Consulting · Education · Professional Services
+    </p>
+  </div>
+
+  <h2 style="color:#0d1120;font-size:20px;border-bottom:2px solid #9c27b0;padding-bottom:8px;">
+    What is BookingLance?
+  </h2>
+  <p style="color:#374151;line-height:1.7;">
+    BookingLance is a complete, white-label booking module for Odoo 19.
+    It allows any service business — consulting firms, tutoring centers,
+    clinics, law firms — to offer online booking directly from their
+    Odoo website, with zero external tools required.
+  </p>
+
+  <h2 style="color:#0d1120;font-size:20px;border-bottom:2px solid #9c27b0;padding-bottom:8px;margin-top:32px;">
+    Key Features
+  </h2>
+  <table style="width:100%;border-collapse:collapse;font-size:14px;">
+    <tr style="background:#f9fafb;">
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;width:200px;">Per-staff scheduling</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">Each staff member has their own weekly schedule. Slots are auto-generated up to 30 days ahead via cron.</td>
+    </tr>
+    <tr>
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;">Auto slot generation</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">Set a weekly schedule once. BookingLance generates all available slots automatically every day.</td>
+    </tr>
+    <tr style="background:#f9fafb;">
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;">Buffer time</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">Add buffer time between sessions per service. Prevents back-to-back bookings automatically.</td>
+    </tr>
+    <tr>
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;">Waitlist</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">Full slot is full? Clients join a waitlist. They are notified automatically when a slot opens.</td>
+    </tr>
+    <tr style="background:#f9fafb;">
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;">Recurring bookings</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">Clients can book weekly, biweekly, or monthly recurring sessions in a single flow.</td>
+    </tr>
+    <tr>
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;">Cancel &amp; reschedule</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">Clients cancel or reschedule from their portal. Policies enforce minimum notice hours per service.</td>
+    </tr>
+    <tr style="background:#f9fafb;">
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;">Email notifications</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">Automatic confirmation, cancellation, reschedule, and 24h reminder emails via your Odoo mail server.</td>
+    </tr>
+    <tr>
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;">iCal attachment</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">Every confirmation includes a downloadable .ics calendar file compatible with Google Calendar, Outlook, Apple Calendar.</td>
+    </tr>
+    <tr style="background:#f9fafb;">
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;">Odoo Calendar sync</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">Every confirmed booking creates a calendar event in Odoo Calendar with client and staff as attendees.</td>
+    </tr>
+    <tr>
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;">White-label</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">Custom brand name, color, and logo per website. Fully rebrandable for agencies and resellers.</td>
+    </tr>
+    <tr style="background:#f9fafb;">
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;">Multi-website</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">One Odoo instance, multiple websites. Each website has its own services, staff, and branding.</td>
+    </tr>
+    <tr>
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;">REST API</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">6 JSON endpoints: list services, available slots, create booking, get booking, cancel, reschedule.</td>
+    </tr>
+    <tr style="background:#f9fafb;">
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;">Webhooks</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">Fire webhooks on confirmed, cancelled, rescheduled, and done events. Integrate with any external system.</td>
+    </tr>
+    <tr>
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;">i18n ready</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">Fully translatable. All labels, messages, and templates use Odoo's translation system.</td>
+    </tr>
+  </table>
+
+  <h2 style="color:#0d1120;font-size:20px;border-bottom:2px solid #9c27b0;padding-bottom:8px;margin-top:32px;">
+    Portal Flow
+  </h2>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px;">
+    <div style="flex:1;min-width:160px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px;text-align:center;">
+      <div style="font-size:24px;margin-bottom:8px;">1</div>
+      <div style="font-weight:600;margin-bottom:4px;">Pick Service</div>
+      <div style="font-size:12px;color:#6b7280;">/booking</div>
+    </div>
+    <div style="flex:1;min-width:160px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px;text-align:center;">
+      <div style="font-size:24px;margin-bottom:8px;">2</div>
+      <div style="font-weight:600;margin-bottom:4px;">Pick Time Slot</div>
+      <div style="font-size:12px;color:#6b7280;">/booking/&lt;id&gt;</div>
+    </div>
+    <div style="flex:1;min-width:160px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px;text-align:center;">
+      <div style="font-size:24px;margin-bottom:8px;">3</div>
+      <div style="font-weight:600;margin-bottom:4px;">Review &amp; Confirm</div>
+      <div style="font-size:12px;color:#6b7280;">/booking/review</div>
+    </div>
+    <div style="flex:1;min-width:160px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px;text-align:center;">
+      <div style="font-size:24px;margin-bottom:8px;">4</div>
+      <div style="font-weight:600;margin-bottom:4px;">Confirmation</div>
+      <div style="font-size:12px;color:#6b7280;">Email + iCal</div>
+    </div>
+  </div>
+
+  <h2 style="color:#0d1120;font-size:20px;border-bottom:2px solid #9c27b0;padding-bottom:8px;margin-top:32px;">
+    REST API Endpoints
+  </h2>
+  <table style="width:100%;border-collapse:collapse;font-size:13px;font-family:monospace;">
+    <tr style="background:#0d1120;color:#ffffff;">
+      <td style="padding:10px 12px;font-weight:600;">Method</td>
+      <td style="padding:10px 12px;font-weight:600;">Endpoint</td>
+      <td style="padding:10px 12px;font-weight:600;">Description</td>
+    </tr>
+    <tr><td style="padding:10px;border:1px solid #e5e7eb;color:#34d399;">GET</td><td style="padding:10px;border:1px solid #e5e7eb;">/api/booking/services</td><td style="padding:10px;border:1px solid #e5e7eb;">List all active services</td></tr>
+    <tr style="background:#f9fafb;"><td style="padding:10px;border:1px solid #e5e7eb;color:#34d399;">GET</td><td style="padding:10px;border:1px solid #e5e7eb;">/api/booking/slots?service_id=X</td><td style="padding:10px;border:1px solid #e5e7eb;">Available slots for a service</td></tr>
+    <tr><td style="padding:10px;border:1px solid #e5e7eb;color:#fb923c;">POST</td><td style="padding:10px;border:1px solid #e5e7eb;">/api/booking/create</td><td style="padding:10px;border:1px solid #e5e7eb;">Create a new booking</td></tr>
+    <tr style="background:#f9fafb;"><td style="padding:10px;border:1px solid #e5e7eb;color:#34d399;">GET</td><td style="padding:10px;border:1px solid #e5e7eb;">/api/booking/&lt;id&gt;</td><td style="padding:10px;border:1px solid #e5e7eb;">Get booking details</td></tr>
+    <tr><td style="padding:10px;border:1px solid #e5e7eb;color:#fb923c;">POST</td><td style="padding:10px;border:1px solid #e5e7eb;">/api/booking/&lt;id&gt;/cancel</td><td style="padding:10px;border:1px solid #e5e7eb;">Cancel a booking</td></tr>
+    <tr style="background:#f9fafb;"><td style="padding:10px;border:1px solid #e5e7eb;color:#fb923c;">POST</td><td style="padding:10px;border:1px solid #e5e7eb;">/api/booking/&lt;id&gt;/reschedule</td><td style="padding:10px;border:1px solid #e5e7eb;">Reschedule a booking</td></tr>
+  </table>
+
+  <h2 style="color:#0d1120;font-size:20px;border-bottom:2px solid #9c27b0;padding-bottom:8px;margin-top:32px;">
+    Configuration
+  </h2>
+  <ol style="color:#374151;line-height:2;font-size:14px;">
+    <li>Install the module from Odoo Apps</li>
+    <li>Go to <strong>BookingLance → Configuration → Settings</strong> → create a config for your website</li>
+    <li>Go to <strong>BookingLance → Configuration → Services</strong> → create your services</li>
+    <li>Go to <strong>BookingLance → Configuration → Staff</strong> → add staff, set weekly schedule</li>
+    <li>Click <strong>"Generate Slots Now"</strong> on each staff member</li>
+    <li>Visit <strong>/booking</strong> on your website — you're live</li>
+  </ol>
+
+  <h2 style="color:#0d1120;font-size:20px;border-bottom:2px solid #9c27b0;padding-bottom:8px;margin-top:32px;">
+    Dependencies
+  </h2>
+  <p style="color:#374151;font-size:14px;">
+    <code style="background:#f3f4f6;padding:2px 6px;border-radius:4px;">base</code>
+    <code style="background:#f3f4f6;padding:2px 6px;border-radius:4px;">mail</code>
+    <code style="background:#f3f4f6;padding:2px 6px;border-radius:4px;">portal</code>
+    <code style="background:#f3f4f6;padding:2px 6px;border-radius:4px;">calendar</code>
+    <code style="background:#f3f4f6;padding:2px 6px;border-radius:4px;">website</code>
+    <code style="background:#f3f4f6;padding:2px 6px;border-radius:4px;">hr</code>
+  </p>
+
+  <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:24px;margin-top:32px;text-align:center;">
+    <p style="color:#374151;margin:0 0 8px;font-weight:600;">Developed by Databulance</p>
+    <p style="color:#6b7280;font-size:13px;margin:0;">
+      Odoo custom development &amp; Machine Learning solutions<br/>
+      <a href="https://databulance.com" style="color:#9c27b0;">databulance.com</a>
+      · info@databulance.com
+    </p>
+  </div>
+
+</section>

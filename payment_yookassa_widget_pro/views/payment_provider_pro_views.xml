@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="payment_provider_form_yookassa_pro"
+            model="ir.ui.view">
+        <field name="name">payment.provider.form.yookassa.pro</field>
+        <field name="model">payment.provider</field>
+        <field name="inherit_id"
+               ref="payment_yookassa_widget.payment_provider_form_yookassa"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[contains(@style,'databulance')]"
+                   position="replace">
+                <div invisible="code != 'yookassa'"
+                     style="margin-top:8px;">
+                    <group string="YooKassa Pro License">
+                        <field name="yookassa_pro_license_key"
+                               string="License Key"
+                               password="True"
+                               placeholder="YKPRO-XXXX-XXXX-XXXX"/>
+                        <field name="yookassa_pro_license_status"
+                               string="Status"
+                               readonly="1"/>
+                    </group>
+                    <p style="font-size:12px;color:#666;margin-top:4px;">
+                        Support:
+                        <a href="mailto:support@databulance.com">
+                            support@databulance.com
+                        </a>
+                    </p>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

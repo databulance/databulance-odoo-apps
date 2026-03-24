@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_yookassa_pro_cron,payment.yookassa.pro.cron access,model_payment_yookassa_pro_cron,base.group_system,1,0,0,0

@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ================================================================
+         CONFIRMATION
+    ================================================================ -->
+    <record id="email_template_confirmation" model="mail.template">
+        <field name="name">BookingLance — Booking Confirmed</field>
+        <field name="model_id" ref="booking_lance.model_booking_lance_booking"/>
+        <field name="subject">Booking Confirmed — {{ object.name }}</field>
+        <field name="email_to">{{ object.partner_id.email }}</field>
+        <field name="email_from">
+            {{ (object.env['booking_lance.config'].search([], limit=1).notify_admin_email or 'noreply@example.com') }}
+        </field>
+        <field name="auto_delete" eval="True"/>
+        <field name="body_html"><![CDATA[
+<div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:0;">
+
+  <div style="background:#0d1120;padding:32px 24px;text-align:center;border-radius:8px 8px 0 0;">
+    <h1 style="color:#ffffff;font-size:22px;margin:0 0 8px;">
+      Booking Confirmed
+    </h1>
+    <p style="color:#9c27b0;font-family:monospace;font-size:12px;margin:0;">
+      {{ object.name }}
+    </p>
+  </div>
+
+  <div style="background:#f9fafb;padding:32px 24px;border-radius:0 0 8px 8px;">
+    <p style="color:#374151;margin:0 0 20px;">
+      Dear {{ object.partner_id.name }},
+    </p>
+    <p style="color:#374151;margin:0 0 24px;">
+      Your booking has been confirmed. Here are the details:
+    </p>
+
+    <table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:24px;">
+      <tr>
+        <td style="padding:10px 12px;background:#ffffff;border:1px solid #e5e7eb;font-weight:600;width:140px;color:#374151;">Service</td>
+        <td style="padding:10px 12px;background:#ffffff;border:1px solid #e5e7eb;color:#374151;">{{ object.service_id.name }}</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 12px;background:#f3f4f6;border:1px solid #e5e7eb;font-weight:600;color:#374151;">Staff</td>
+        <td style="padding:10px 12px;background:#f3f4f6;border:1px solid #e5e7eb;color:#374151;">{{ object.staff_id.name if object.staff_id else 'To be assigned' }}</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 12px;background:#ffffff;border:1px solid #e5e7eb;font-weight:600;color:#374151;">Date &amp; Time</td>
+        <td style="padding:10px 12px;background:#ffffff;border:1px solid #e5e7eb;color:#374151;">{{ object.start_datetime }}</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 12px;background:#f3f4f6;border:1px solid #e5e7eb;font-weight:600;color:#374151;">Duration</td>
+        <td style="padding:10px 12px;background:#f3f4f6;border:1px solid #e5e7eb;color:#374151;">{{ object.service_id.duration }} hour(s)</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 12px;background:#ffffff;border:1px solid #e5e7eb;font-weight:600;color:#374151;">Reference</td>
+        <td style="padding:10px 12px;background:#ffffff;border:1px solid #e5e7eb;color:#374151;">{{ object.name }}</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 12px;background:#f3f4f6;border:1px solid #e5e7eb;font-weight:600;color:#374151;">Payment</td>
+        <td style="padding:10px 12px;background:#f3f4f6;border:1px solid #e5e7eb;color:#374151;">{{ dict(object._fields['payment_mode'].selection).get(object.payment_mode, '') }}</td>
+      </tr>
+    </table>
+
+    <div style="background:#ede9fe;border-left:4px solid #9c27b0;padding:16px;border-radius:4px;margin-bottom:24px;">
+      <p style="margin:0;font-size:13px;color:#5b21b6;">
+        A calendar invite (.ics) is attached to this email.
+        You can also manage your bookings from your
+        <a href="{{ object.env['ir.config_parameter'].sudo().get_param('web.base.url') }}/my/bookings"
+           style="color:#7c3aed;">client portal</a>.
+      </p>
+    </div>
+
+    <p style="color:#6b7280;font-size:13px;margin:0;">
+      If you need to cancel or reschedule, please do so at least
+      {{ object.service_id.cancellation_hours or 24 }} hours before your session.
+    </p>
+  </div>
+
+  <div style="text-align:center;padding:20px;color:#9ca3af;font-size:11px;">
+    Powered by BookingLance · <a href="https://databulance.com" style="color:#9c27b0;">databulance.com</a>
+  </div>
+
+</div>
+        ]]></field>
+        <field name="attachment_ids" eval="[]"/>
+    </record>
+
+    <!-- ================================================================
+         CANCELLATION
+    ================================================================ -->
+    <record id="email_template_cancellation" model="mail.template">
+        <field name="name">BookingLance — Booking Cancelled</field>
+        <field name="model_id" ref="booking_lance.model_booking_lance_booking"/>
+        <field name="subject">Booking Cancelled — {{ object.name }}</field>
+        <field name="email_to">{{ object.partner_id.email }}</field>
+        <field name="auto_delete" eval="True"/>
+        <field name="body_html"><![CDATA[
+<div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:0;">
+  <div style="background:#7f1d1d;padding:32px 24px;text-align:center;border-radius:8px 8px 0 0;">
+    <h1 style="color:#ffffff;font-size:22px;margin:0 0 8px;">Booking Cancelled</h1>
+    <p style="color:#fca5a5;font-family:monospace;font-size:12px;margin:0;">{{ object.name }}</p>
+  </div>
+  <div style="background:#f9fafb;padding:32px 24px;border-radius:0 0 8px 8px;">
+    <p style="color:#374151;">Dear {{ object.partner_id.name }},</p>
+    <p style="color:#374151;">
+      Your booking for <strong>{{ object.service_id.name }}</strong>
+      on <strong>{{ object.start_datetime }}</strong> has been cancelled.
+    </p>
+    <t t-if="object.cancellation_reason">
+      <p style="color:#374151;">
+        Reason: {{ object.cancellation_reason }}
+      </p>
+    </t>
+    <p style="color:#374151;">
+      You can book a new session from your
+      <a href="{{ object.env['ir.config_parameter'].sudo().get_param('web.base.url') }}/booking"
+         style="color:#9c27b0;">booking page</a>.
+    </p>
+  </div>
+  <div style="text-align:center;padding:20px;color:#9ca3af;font-size:11px;">
+    Powered by BookingLance · <a href="https://databulance.com" style="color:#9c27b0;">databulance.com</a>
+  </div>
+</div>
+        ]]></field>
+    </record>
+
+    <!-- ================================================================
+         RESCHEDULE
+    ================================================================ -->
+    <record id="email_template_reschedule" model="mail.template">
+        <field name="name">BookingLance — Booking Rescheduled</field>
+        <field name="model_id" ref="booking_lance.model_booking_lance_booking"/>
+        <field name="subject">Booking Rescheduled — {{ object.name }}</field>
+        <field name="email_to">{{ object.partner_id.email }}</field>
+        <field name="auto_delete" eval="True"/>
+        <field name="body_html"><![CDATA[
+<div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:0;">
+  <div style="background:#1e3a5f;padding:32px 24px;text-align:center;border-radius:8px 8px 0 0;">
+    <h1 style="color:#ffffff;font-size:22px;margin:0 0 8px;">Booking Rescheduled</h1>
+    <p style="color:#93c5fd;font-family:monospace;font-size:12px;margin:0;">{{ object.name }}</p>
+  </div>
+  <div style="background:#f9fafb;padding:32px 24px;border-radius:0 0 8px 8px;">
+    <p style="color:#374151;">Dear {{ object.partner_id.name }},</p>
+    <p style="color:#374151;">
+      Your booking has been rescheduled. Your new session details:
+    </p>
+    <table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:24px;">
+      <tr>
+        <td style="padding:10px 12px;background:#ffffff;border:1px solid #e5e7eb;font-weight:600;width:140px;color:#374151;">Service</td>
+        <td style="padding:10px 12px;background:#ffffff;border:1px solid #e5e7eb;color:#374151;">{{ object.service_id.name }}</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 12px;background:#f3f4f6;border:1px solid #e5e7eb;font-weight:600;color:#374151;">New Date</td>
+        <td style="padding:10px 12px;background:#f3f4f6;border:1px solid #e5e7eb;color:#374151;">{{ object.start_datetime }}</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 12px;background:#ffffff;border:1px solid #e5e7eb;font-weight:600;color:#374151;">Staff</td>
+        <td style="padding:10px 12px;background:#ffffff;border:1px solid #e5e7eb;color:#374151;">{{ object.staff_id.name if object.staff_id else 'To be assigned' }}</td>
+      </tr>
+    </table>
+    <p style="color:#6b7280;font-size:13px;">
+      Manage your bookings from your
+      <a href="{{ object.env['ir.config_parameter'].sudo().get_param('web.base.url') }}/my/bookings"
+         style="color:#9c27b0;">client portal</a>.
+    </p>
+  </div>
+  <div style="text-align:center;padding:20px;color:#9ca3af;font-size:11px;">
+    Powered by BookingLance · <a href="https://databulance.com" style="color:#9c27b0;">databulance.com</a>
+  </div>
+</div>
+        ]]></field>
+    </record>
+
+    <!-- ================================================================
+         REMINDER
+    ================================================================ -->
+    <record id="email_template_reminder" model="mail.template">
+        <field name="name">BookingLance — Session Reminder</field>
+        <field name="model_id" ref="booking_lance.model_booking_lance_booking"/>
+        <field name="subject">Reminder: {{ object.service_id.name }} tomorrow — {{ object.name }}</field>
+        <field name="email_to">{{ object.partner_id.email }}</field>
+        <field name="auto_delete" eval="True"/>
+        <field name="body_html"><![CDATA[
+<div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:0;">
+  <div style="background:#0d1120;padding:32px 24px;text-align:center;border-radius:8px 8px 0 0;">
+    <h1 style="color:#ffffff;font-size:22px;margin:0 0 8px;">Session Reminder</h1>
+    <p style="color:#9c27b0;font-family:monospace;font-size:12px;margin:0;">{{ object.name }}</p>
+  </div>
+  <div style="background:#f9fafb;padding:32px 24px;border-radius:0 0 8px 8px;">
+    <p style="color:#374151;">Dear {{ object.partner_id.name }},</p>
+    <p style="color:#374151;">
+      This is a reminder that your session is coming up in approximately 24 hours.
+    </p>
+    <table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:24px;">
+      <tr>
+        <td style="padding:10px 12px;background:#ffffff;border:1px solid #e5e7eb;font-weight:600;width:140px;color:#374151;">Service</td>
+        <td style="padding:10px 12px;background:#ffffff;border:1px solid #e5e7eb;color:#374151;">{{ object.service_id.name }}</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 12px;background:#f3f4f6;border:1px solid #e5e7eb;font-weight:600;color:#374151;">Date &amp; Time</td>
+        <td style="padding:10px 12px;background:#f3f4f6;border:1px solid #e5e7eb;color:#374151;">{{ object.start_datetime }}</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 12px;background:#ffffff;border:1px solid #e5e7eb;font-weight:600;color:#374151;">Staff</td>
+        <td style="padding:10px 12px;background:#ffffff;border:1px solid #e5e7eb;color:#374151;">{{ object.staff_id.name if object.staff_id else 'To be assigned' }}</td>
+      </tr>
+    </table>
+    <p style="color:#6b7280;font-size:13px;">
+      Need to cancel or reschedule? Visit your
+      <a href="{{ object.env['ir.config_parameter'].sudo().get_param('web.base.url') }}/my/bookings"
+         style="color:#9c27b0;">client portal</a>.
+    </p>
+  </div>
+  <div style="text-align:center;padding:20px;color:#9ca3af;font-size:11px;">
+    Powered by BookingLance · <a href="https://databulance.com" style="color:#9c27b0;">databulance.com</a>
+  </div>
+</div>
+        ]]></field>
+    </record>
+
+    <!-- ================================================================
+         ADMIN NOTIFICATION
+    ================================================================ -->
+    <record id="email_template_admin_notification" model="mail.template">
+        <field name="name">BookingLance — Admin New Booking</field>
+        <field name="model_id" ref="booking_lance.model_booking_lance_booking"/>
+        <field name="subject">New Booking: {{ object.service_id.name }} — {{ object.partner_id.name }}</field>
+        <field name="email_to">
+            {{ object.env['booking_lance.config'].search([], limit=1).notify_admin_email or '' }}
+        </field>
+        <field name="auto_delete" eval="True"/>
+        <field name="body_html"><![CDATA[
+<div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px;">
+  <h2 style="color:#0d1120;margin-bottom:16px;">New Booking Received</h2>
+  <table style="width:100%;border-collapse:collapse;font-size:14px;">
+    <tr><td style="padding:8px 12px;background:#f3f4f6;font-weight:600;border:1px solid #e5e7eb;width:130px;">Reference</td>
+        <td style="padding:8px 12px;border:1px solid #e5e7eb;">{{ object.name }}</td></tr>
+    <tr><td style="padding:8px 12px;font-weight:600;border:1px solid #e5e7eb;">Client</td>
+        <td style="padding:8px 12px;border:1px solid #e5e7eb;">{{ object.partner_id.name }}</td></tr>
+    <tr><td style="padding:8px 12px;background:#f3f4f6;font-weight:600;border:1px solid #e5e7eb;">Email</td>
+        <td style="padding:8px 12px;background:#f3f4f6;border:1px solid #e5e7eb;">{{ object.partner_id.email }}</td></tr>
+    <tr><td style="padding:8px 12px;font-weight:600;border:1px solid #e5e7eb;">Service</td>
+        <td style="padding:8px 12px;border:1px solid #e5e7eb;">{{ object.service_id.name }}</td></tr>
+    <tr><td style="padding:8px 12px;background:#f3f4f6;font-weight:600;border:1px solid #e5e7eb;">Date</td>
+        <td style="padding:8px 12px;background:#f3f4f6;border:1px solid #e5e7eb;">{{ object.start_datetime }}</td></tr>
+    <tr><td style="padding:8px 12px;font-weight:600;border:1px solid #e5e7eb;">Staff</td>
+        <td style="padding:8px 12px;border:1px solid #e5e7eb;">{{ object.staff_id.name if object.staff_id else 'Auto-assign' }}</td></tr>
+    <tr><td style="padding:8px 12px;background:#f3f4f6;font-weight:600;border:1px solid #e5e7eb;">Notes</td>
+        <td style="padding:8px 12px;background:#f3f4f6;border:1px solid #e5e7eb;">{{ object.notes or '—' }}</td></tr>
+  </table>
+</div>
+        ]]></field>
+    </record>
+
+    <!-- ================================================================
+         WAITLIST NOTIFICATION
+    ================================================================ -->
+    <record id="email_template_waitlist_notify" model="mail.template">
+        <field name="name">BookingLance — Waitlist Slot Available</field>
+        <field name="model_id" ref="booking_lance.model_booking_lance_waitlist"/>
+        <field name="subject">A slot is now available — {{ object.service_id.name }}</field>
+        <field name="email_to">{{ object.partner_id.email }}</field>
+        <field name="auto_delete" eval="True"/>
+        <field name="body_html"><![CDATA[
+<div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:0;">
+  <div style="background:#0d1120;padding:32px 24px;text-align:center;border-radius:8px 8px 0 0;">
+    <h1 style="color:#ffffff;font-size:22px;margin:0 0 8px;">Slot Available</h1>
+    <p style="color:#34d399;font-family:monospace;font-size:12px;margin:0;">Waitlist Notification</p>
+  </div>
+  <div style="background:#f9fafb;padding:32px 24px;border-radius:0 0 8px 8px;">
+    <p style="color:#374151;">Dear {{ object.partner_id.name }},</p>
+    <p style="color:#374151;">
+      Good news — a slot has become available for
+      <strong>{{ object.service_id.name }}</strong>
+      on <strong>{{ object.slot_id.start_datetime }}</strong>.
+    </p>
+    <p style="color:#374151;">
+      Book now before it fills up again:
+    </p>
+    <div style="text-align:center;margin:24px 0;">
+      <a href="{{ object.env['ir.config_parameter'].sudo().get_param('web.base.url') }}/booking"
+         style="background:#9c27b0;color:#ffffff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:600;">
+        Book Now
+      </a>
+    </div>
+  </div>
+  <div style="text-align:center;padding:20px;color:#9ca3af;font-size:11px;">
+    Powered by BookingLance · <a href="https://databulance.com" style="color:#9c27b0;">databulance.com</a>
+  </div>
+</div>
+        ]]></field>
+    </record>
+
+</odoo>

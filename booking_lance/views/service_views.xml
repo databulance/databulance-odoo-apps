@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bl_service_form" model="ir.ui.view">
+        <field name="name">booking_lance.service.form</field>
+        <field name="model">booking_lance.service</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_bookings"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-calendar">
+                            <field name="booking_count"
+                                   widget="statinfo"
+                                   string="Bookings"/>
+                        </button>
+                    </div>
+                    <field name="image" widget="image"
+                           class="oe_avatar"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"
+                                   placeholder="Service Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Details">
+                            <field name="category_id"/>
+                            <field name="duration"/>
+                            <field name="buffer_time"/>
+                            <field name="max_capacity"/>
+                            <field name="payment_mode"/>
+                            <field name="color"/>
+                        </group>
+                        <group string="Policies">
+                            <field name="cancellation_hours"/>
+                            <field name="reschedule_hours"/>
+                            <field name="allow_recurring"/>
+                            <field name="allow_waitlist"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group string="Availability">
+                        <field name="website_ids"
+                               widget="many2many_tags"/>
+                        <field name="staff_ids"
+                               widget="many2many_tags"/>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description"
+                                   widget="html"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_bl_service_list" model="ir.ui.view">
+        <field name="name">booking_lance.service.list</field>
+        <field name="model">booking_lance.service</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="duration"/>
+                <field name="buffer_time"/>
+                <field name="max_capacity"/>
+                <field name="payment_mode"/>
+                <field name="booking_count"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_bl_service_kanban" model="ir.ui.view">
+        <field name="name">booking_lance.service.kanban</field>
+        <field name="model">booking_lance.service</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <field name="duration"/>
+                <field name="booking_count"/>
+                <field name="color"/>
+                <field name="payment_mode"/>
+                <templates>
+                    <t t-name="card" color="color">
+                        <field name="name" class="fw-bold"/>
+                        <field name="duration"/>
+                        <div class="text-muted">
+                            <field name="booking_count"/> bookings
+                        </div>
+                        <field name="payment_mode" widget="badge"/>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_bl_service_category_list" model="ir.ui.view">
+        <field name="name">booking_lance.service.category.list</field>
+        <field name="model">booking_lance.service.category</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="description"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bl_services" model="ir.actions.act_window">
+        <field name="name">Services</field>
+        <field name="res_model">booking_lance.service</field>
+        <field name="view_mode">kanban,list,form</field>
+    </record>
+
+    <record id="action_bl_service_categories"
+            model="ir.actions.act_window">
+        <field name="name">Service Categories</field>
+        <field name="res_model">booking_lance.service.category</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

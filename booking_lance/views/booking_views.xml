@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bl_booking_form" model="ir.ui.view">
+        <field name="name">booking_lance.booking.form</field>
+        <field name="model">booking_lance.booking</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm"
+                            string="Confirm"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_done"
+                            string="Mark as Done"
+                            type="object"
+                            invisible="state != 'confirmed'"/>
+                    <button name="action_cancel"
+                            string="Cancel"
+                            type="object"
+                            invisible="state in ['done','cancelled']"/>
+                    <button name="action_reset_draft"
+                            string="Reset to Draft"
+                            type="object"
+                            invisible="state != 'cancelled'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Client and Service">
+                            <field name="partner_id"
+                                   domain="[('is_company','=',False)]"
+                                   context="{'default_is_company': False}"
+                                   placeholder="Search for a client..."/>
+                            <field name="service_id"/>
+                            <field name="staff_id"
+                                   domain="[('service_ids','in',[service_id])]"
+                                   placeholder="Auto-assigned if empty"/>
+                            <field name="payment_mode" readonly="1"/>
+                        </group>
+                        <group string="Timing">
+                            <field name="slot_id"
+                                   domain="[('service_id','=',service_id),('is_available','=',True)]"
+                                   placeholder="Select a time slot"/>
+                            <field name="start_datetime" readonly="1"/>
+                            <field name="end_datetime" readonly="1"/>
+                            <field name="website_id"/>
+                        </group>
+                    </group>
+                    <group string="Recurrence"
+                           invisible="not is_recurring">
+                        <field name="is_recurring"/>
+                        <field name="recurrence_id"
+                               invisible="not is_recurring"/>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1"
+                               placeholder="Any notes from the client..."/>
+                    </group>
+                    <group string="Cancellation"
+                           invisible="state != 'cancelled'">
+                        <field name="cancellation_reason"
+                               nolabel="1"/>
+                    </group>
+                    <group string="Calendar and iCal"
+                           invisible="state == 'draft'">
+                        <field name="calendar_event_id"
+                               readonly="1"/>
+                        <field name="ical_token" readonly="1"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_bl_booking_list" model="ir.ui.view">
+        <field name="name">booking_lance.booking.list</field>
+        <field name="model">booking_lance.booking</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'confirmed'"
+                  decoration-muted="state == 'cancelled'"
+                  decoration-info="state == 'done'"
+                  decoration-warning="state == 'draft'">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="service_id"/>
+                <field name="staff_id"/>
+                <field name="start_datetime"/>
+                <field name="end_datetime"/>
+                <field name="payment_mode"/>
+                <field name="is_recurring"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'confirmed'"
+                       decoration-warning="state == 'draft'"
+                       decoration-danger="state == 'cancelled'"
+                       decoration-info="state == 'done'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_bl_booking_kanban" model="ir.ui.view">
+        <field name="name">booking_lance.booking.kanban</field>
+        <field name="model">booking_lance.booking</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="service_id"/>
+                <field name="staff_id"/>
+                <field name="start_datetime"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="card">
+                        <field name="name" class="fw-bold"/>
+                        <field name="partner_id"/>
+                        <field name="service_id"/>
+                        <field name="start_datetime"/>
+                        <field name="staff_id"/>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_bl_booking_calendar" model="ir.ui.view">
+        <field name="name">booking_lance.booking.calendar</field>
+        <field name="model">booking_lance.booking</field>
+        <field name="arch" type="xml">
+            <calendar string="Bookings"
+                      date_start="start_datetime"
+                      date_stop="end_datetime"
+                      color="service_id"
+                      mode="month">
+                <field name="partner_id"/>
+                <field name="service_id"/>
+                <field name="staff_id"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="action_bl_bookings" model="ir.actions.act_window">
+        <field name="name">Bookings</field>
+        <field name="res_model">booking_lance.booking</field>
+        <field name="view_mode">kanban,list,form,calendar</field>
+        <field name="context">{'default_partner_id': False}</field>
+    </record>
+</odoo>

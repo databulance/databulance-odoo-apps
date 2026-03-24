@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_bl_root"
+              name="BookingLance"
+              sequence="25"
+              groups="booking_lance.group_booking_lance_user"/>
+
+    <menuitem id="menu_bl_bookings"
+              name="Bookings"
+              parent="menu_bl_root"
+              action="action_bl_bookings"
+              sequence="1"
+              groups="booking_lance.group_booking_lance_user"/>
+
+    <menuitem id="menu_bl_slots"
+              name="Time Slots"
+              parent="menu_bl_root"
+              action="action_bl_slots"
+              sequence="2"
+              groups="booking_lance.group_booking_lance_user"/>
+
+    <menuitem id="menu_bl_waitlist"
+              name="Waitlist"
+              parent="menu_bl_root"
+              action="action_bl_waitlist"
+              sequence="3"
+              groups="booking_lance.group_booking_lance_user"/>
+
+    <menuitem id="menu_bl_config_root"
+              name="Configuration"
+              parent="menu_bl_root"
+              sequence="10"
+              groups="booking_lance.group_booking_lance_manager"/>
+
+    <menuitem id="menu_bl_services"
+              name="Services"
+              parent="menu_bl_config_root"
+              action="action_bl_services"
+              sequence="1"
+              groups="booking_lance.group_booking_lance_manager"/>
+
+    <menuitem id="menu_bl_service_categories"
+              name="Service Categories"
+              parent="menu_bl_config_root"
+              action="action_bl_service_categories"
+              sequence="2"
+              groups="booking_lance.group_booking_lance_manager"/>
+
+    <menuitem id="menu_bl_staff"
+              name="Staff"
+              parent="menu_bl_config_root"
+              action="action_bl_staff"
+              sequence="3"
+              groups="booking_lance.group_booking_lance_manager"/>
+
+    <menuitem id="menu_bl_webhooks"
+              name="Webhooks"
+              parent="menu_bl_config_root"
+              action="action_bl_webhooks"
+              sequence="4"
+              groups="booking_lance.group_booking_lance_manager"/>
+
+    <menuitem id="menu_bl_config"
+              name="Settings"
+              parent="menu_bl_config_root"
+              action="action_bl_config"
+              sequence="5"
+              groups="booking_lance.group_booking_lance_manager"/>
+</odoo>

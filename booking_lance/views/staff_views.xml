@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bl_staff_form" model="ir.ui.view">
+        <field name="name">booking_lance.staff.form</field>
+        <field name="model">booking_lance.staff</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_generate_slots"
+                            string="Generate Slots Now"
+                            type="object"
+                            class="btn-primary"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button"
+                                icon="fa-calendar"
+                                type="object"
+                                name="action_view_bookings">
+                            <field name="booking_count"
+                                   widget="statinfo"
+                                   string="Bookings"/>
+                        </button>
+                    </div>
+                    <field name="image" widget="image"
+                           class="oe_avatar"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"
+                                   placeholder="Staff Name"/>
+                        </h1>
+                        <h2>
+                            <field name="job_title"
+                                   placeholder="Job Title"/>
+                        </h2>
+                    </div>
+                    <group>
+                        <group string="Contact">
+                            <field name="email"/>
+                            <field name="phone"/>
+                            <field name="employee_id"/>
+                            <field name="user_id"/>
+                        </group>
+                        <group string="Settings">
+                            <field name="max_bookings_per_day"/>
+                            <field name="active"/>
+                            <field name="color"/>
+                        </group>
+                    </group>
+                    <group string="Services and Websites">
+                        <field name="service_ids"
+                               widget="many2many_tags"/>
+                        <field name="website_ids"
+                               widget="many2many_tags"/>
+                    </group>
+                    <notebook>
+                        <page string="Weekly Schedule">
+                            <field name="schedule_ids">
+                                <list editable="bottom">
+                                    <field name="day_of_week"/>
+                                    <field name="time_from"
+                                           widget="float_time"/>
+                                    <field name="time_to"
+                                           widget="float_time"/>
+                                    <field name="active"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Bio">
+                            <field name="bio"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_bl_staff_list" model="ir.ui.view">
+        <field name="name">booking_lance.staff.list</field>
+        <field name="model">booking_lance.staff</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="job_title"/>
+                <field name="email"/>
+                <field name="max_bookings_per_day"/>
+                <field name="booking_count"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_bl_staff_kanban" model="ir.ui.view">
+        <field name="name">booking_lance.staff.kanban</field>
+        <field name="model">booking_lance.staff</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <field name="job_title"/>
+                <field name="email"/>
+                <field name="booking_count"/>
+                <field name="color"/>
+                <templates>
+                    <t t-name="card" color="color">
+                        <field name="name" class="fw-bold"/>
+                        <field name="job_title"/>
+                        <div class="text-muted">
+                            <field name="booking_count"/> bookings
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_bl_staff" model="ir.actions.act_window">
+        <field name="name">Staff</field>
+        <field name="res_model">booking_lance.staff</field>
+        <field name="view_mode">kanban,list,form</field>
+    </record>
+</odoo>
