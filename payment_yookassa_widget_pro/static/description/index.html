@@ -1,0 +1,114 @@
+<section style="font-family:sans-serif;max-width:800px;margin:0 auto;padding:24px;">
+
+  <div style="background:#1a0a2e;border-radius:12px;padding:40px 32px;text-align:center;margin-bottom:32px;">
+    <h1 style="color:#ffffff;font-size:32px;margin:0 0 12px;">YooKassa Widget Pro</h1>
+    <p style="color:#875A7B;font-size:16px;margin:0 0 8px;font-family:monospace;">
+      54-FZ receipts · Email verification · Portal onboarding
+    </p>
+    <p style="color:rgba(255,255,255,0.6);font-size:14px;margin:0;">
+      Enterprise extension for YooKassa Payment Widget
+    </p>
+  </div>
+
+  <h2 style="color:#1a0a2e;font-size:20px;border-bottom:2px solid #875A7B;padding-bottom:8px;">
+    What is YooKassa Widget Pro?
+  </h2>
+  <p style="color:#374151;line-height:1.7;">
+    YooKassa Widget Pro extends the free YooKassa Payment Widget with enterprise features
+    required by Russian businesses — 54-FZ fiscal receipts, automated completion receipts,
+    and a full post-payment onboarding flow for new customers.
+  </p>
+  <p style="color:#374151;line-height:1.7;">
+    Requires: <strong>YooKassa Payment Widget</strong> (free base module).
+  </p>
+
+  <h2 style="color:#1a0a2e;font-size:20px;border-bottom:2px solid #875A7B;padding-bottom:8px;margin-top:32px;">
+    Key Features
+  </h2>
+  <table style="width:100%;border-collapse:collapse;font-size:14px;">
+    <tr style="background:#f9fafb;">
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;width:220px;">54-FZ prepayment receipt</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">Sends a fiscal prepayment receipt to YooKassa at the moment of payment. Required for Russian merchants under Federal Law 54-FZ.</td>
+    </tr>
+    <tr>
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;">54-FZ completion receipt</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">Sends a completion receipt after service delivery. Pulls line items from the sale order. Automated via daily cron.</td>
+    </tr>
+    <tr style="background:#f9fafb;">
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;">Overdue receipt cron</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">Daily cron automatically sends completion receipts for all transactions where service was delivered more than 45 days ago.</td>
+    </tr>
+    <tr>
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;">Email verification</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">After payment, new customers receive a verification email. Token-based confirmation marks the partner as verified in Odoo.</td>
+    </tr>
+    <tr style="background:#f9fafb;">
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;">Portal account creation</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">First-time buyers are guided to set a password and create their Odoo portal account — no manual admin steps required.</td>
+    </tr>
+    <tr>
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;">Configurable onboarding flow</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">Override <code>_yk_onboarding_next_step()</code> to redirect customers to any post-payment page — placement tests, dashboards, lesson portals.</td>
+    </tr>
+    <tr style="background:#f9fafb;">
+      <td style="padding:12px;border:1px solid #e5e7eb;font-weight:600;">Receipt transaction list</td>
+      <td style="padding:12px;border:1px solid #e5e7eb;">Adds "54-FZ Receipt Sent" and "Receipt Date" columns to the payment transaction list view for easy auditing.</td>
+    </tr>
+  </table>
+
+  <h2 style="color:#1a0a2e;font-size:20px;border-bottom:2px solid #875A7B;padding-bottom:8px;margin-top:32px;">
+    Onboarding Flow
+  </h2>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px;">
+    <div style="flex:1;min-width:140px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px;text-align:center;">
+      <div style="font-size:22px;margin-bottom:6px;">1</div>
+      <div style="font-weight:600;font-size:13px;">Payment done</div>
+      <div style="font-size:12px;color:#6b7280;margin-top:4px;">YooKassa confirms</div>
+    </div>
+    <div style="flex:1;min-width:140px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px;text-align:center;">
+      <div style="font-size:22px;margin-bottom:6px;">2</div>
+      <div style="font-weight:600;font-size:13px;">Verify email</div>
+      <div style="font-size:12px;color:#6b7280;margin-top:4px;">Token link sent</div>
+    </div>
+    <div style="flex:1;min-width:140px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px;text-align:center;">
+      <div style="font-size:22px;margin-bottom:6px;">3</div>
+      <div style="font-weight:600;font-size:13px;">Set password</div>
+      <div style="font-size:12px;color:#6b7280;margin-top:4px;">Portal account created</div>
+    </div>
+    <div style="flex:1;min-width:140px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px;text-align:center;">
+      <div style="font-size:22px;margin-bottom:6px;">4</div>
+      <div style="font-weight:600;font-size:13px;">Redirect</div>
+      <div style="font-size:12px;color:#6b7280;margin-top:4px;">Your custom page</div>
+    </div>
+  </div>
+
+  <h2 style="color:#1a0a2e;font-size:20px;border-bottom:2px solid #875A7B;padding-bottom:8px;margin-top:32px;">
+    Configuration
+  </h2>
+  <ol style="color:#374151;line-height:2;font-size:14px;">
+    <li>Install <strong>YooKassa Payment Widget</strong> (free base module) first</li>
+    <li>Install <strong>YooKassa Widget Pro</strong></li>
+    <li>Go to <strong>Accounting &rarr; Configuration &rarr; Payment Providers &rarr; YooKassa</strong></li>
+    <li>Verify your Shop ID and Secret Key are set</li>
+    <li>Completion receipts will be sent automatically by the daily cron</li>
+    <li>To trigger manually: select transactions &rarr; Action &rarr; Send Completion Receipt</li>
+  </ol>
+
+  <h2 style="color:#1a0a2e;font-size:20px;border-bottom:2px solid #875A7B;padding-bottom:8px;margin-top:32px;">
+    Dependencies
+  </h2>
+  <p style="color:#374151;font-size:14px;">
+    <code style="background:#f3f4f6;padding:2px 6px;border-radius:4px;">payment_yookassa_widget</code>
+    <code style="background:#f3f4f6;padding:2px 6px;border-radius:4px;">mail</code>
+    <code style="background:#f3f4f6;padding:2px 6px;border-radius:4px;">portal</code>
+  </p>
+
+  <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:24px;margin-top:32px;text-align:center;">
+    <p style="color:#374151;margin:0 0 8px;font-weight:600;">Published by Databulance</p>
+    <p style="color:#6b7280;font-size:13px;margin:0;">
+      Odoo custom development &amp; Machine Learning solutions<br/>
+      <a href="mailto:support@databulance.com" style="color:#875A7B;">support@databulance.com</a>
+    </p>
+  </div>
+
+</section>
