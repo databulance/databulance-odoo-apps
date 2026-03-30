@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+    <record id="subject_general_english" model="edu.subject"><field name="name">General English</field><field name="sequence">1</field></record>
+    <record id="subject_business_english" model="edu.subject"><field name="name">Business English</field><field name="sequence">2</field></record>
+    <record id="subject_mathematics" model="edu.subject"><field name="name">Mathematics</field><field name="sequence">3</field></record>
+</odoo>

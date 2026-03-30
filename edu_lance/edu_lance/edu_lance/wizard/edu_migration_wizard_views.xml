@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_edu_migration_wizard" model="ir.ui.view">
+    <field name="name">edu.migration.wizard.form</field>
+    <field name="model">edu.migration.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Import from EduOps">
+        <group string="Options">
+          <field name="dry_run"/>
+          <field name="migrate_levels"/>
+          <field name="migrate_subjects"/>
+          <field name="migrate_curriculum"/>
+          <field name="migrate_wallet"/>
+          <field name="migrate_resources"/>
+        </group>
+        <group string="Result" invisible="not result_log">
+          <field name="result_log" nolabel="1" readonly="1"/>
+        </group>
+        <footer>
+          <button name="action_run" string="Run Import" type="object" class="btn-primary"/>
+          <button string="Close" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+  <record id="view_edu_subscription_wizard" model="ir.ui.view">
+    <field name="name">edu.subscription.wizard.form</field>
+    <field name="model">edu.subscription.wizard</field>
+    <field name="arch" type="xml">
+      <form string="New Subscription">
+        <group>
+          <field name="student_id"/>
+          <field name="type_id"/>
+          <field name="start_date"/>
+          <field name="carried_over"/>
+          <field name="notes"/>
+        </group>
+        <footer>
+          <button name="action_create" string="Create Subscription" type="object" class="btn-primary"/>
+          <button string="Cancel" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+</odoo>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_edu_payout" model="ir.sequence">
+        <field name="name">EduLance Payout</field>
+        <field name="code">edu.payout</field>
+        <field name="prefix">PAY/</field>
+        <field name="padding">5</field>
+    </record>
+    <record id="stage_new" model="edu.pipeline.stage"><field name="name">New Inquiry</field><field name="code">new</field><field name="sequence">1</field></record>
+    <record id="stage_trial_scheduled" model="edu.pipeline.stage"><field name="name">Trial Scheduled</field><field name="code">trial_scheduled</field><field name="sequence">2</field><field name="color">3</field></record>
+    <record id="stage_trial_done" model="edu.pipeline.stage"><field name="name">Trial Done</field><field name="code">trial_done</field><field name="sequence">3</field><field name="color">2</field></record>
+    <record id="stage_enrolled" model="edu.pipeline.stage"><field name="name">Enrolled</field><field name="code">enrolled</field><field name="sequence">4</field><field name="color">10</field></record>
+    <record id="stage_active" model="edu.pipeline.stage"><field name="name">Active</field><field name="code">active</field><field name="sequence">5</field><field name="color">14</field></record>
+    <record id="stage_churned" model="edu.pipeline.stage"><field name="name">Churned</field><field name="code">churned</field><field name="sequence">6</field><field name="color">1</field><field name="fold">True</field></record>
+</odoo>
