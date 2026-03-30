@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>edu_lance — All-in-One Education CRM for Odoo 19</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:   #0F1E41;
+    --teal:   #00BCB4;
+    --gold:   #FFB400;
+    --white:  #FFFFFF;
+    --slate:  #F0F4FA;
+    --text:   #1A2B4A;
+    --muted:  #5A6A85;
+    --radius: 16px;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    background: var(--white);
+    line-height: 1.65;
+  }
+
+  /* ── HERO ─────────────────────────────────── */
+  .hero {
+    background: var(--navy);
+    color: var(--white);
+    padding: 72px 48px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -80px;
+    width: 420px; height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,188,180,.25) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 30%;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,180,0,.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-inner { max-width: 860px; position: relative; z-index: 1; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,188,180,.18);
+    border: 1px solid rgba(0,188,180,.4);
+    color: var(--teal);
+    font-family: 'Syne', sans-serif;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: .12em; text-transform: uppercase;
+    padding: 6px 14px; border-radius: 999px;
+    margin-bottom: 28px;
+  }
+  .badge span { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+  .hero h1 em { color: var(--teal); font-style: normal; }
+
+  .hero p {
+    font-size: 17px;
+    color: rgba(255,255,255,.72);
+    max-width: 560px;
+    margin-bottom: 36px;
+    font-weight: 300;
+  }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: 10px; }
+  .pill {
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.14);
+    color: rgba(255,255,255,.85);
+    font-size: 13px; font-weight: 500;
+    padding: 7px 16px; border-radius: 999px;
+  }
+
+  /* ── SECTION SHELL ────────────────────────── */
+  .section { padding: 72px 48px; }
+  .section--slate { background: var(--slate); }
+  .section__inner { max-width: 900px; margin: 0 auto; }
+
+  .section-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: .14em; text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(22px, 3vw, 34px);
+    font-weight: 800;
+    color: var(--navy);
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+  .section-sub {
+    font-size: 16px; color: var(--muted);
+    max-width: 560px; font-weight: 300;
+    margin-bottom: 48px;
+  }
+
+  /* ── FEATURE GRID ─────────────────────────── */
+  .feat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+  }
+  .feat-card {
+    background: var(--white);
+    border: 1px solid #E3EAF5;
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    transition: box-shadow .2s, transform .2s;
+  }
+  .feat-card:hover {
+    box-shadow: 0 8px 32px rgba(15,30,65,.1);
+    transform: translateY(-2px);
+  }
+  .feat-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+  .feat-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px; font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+  .feat-card p { font-size: 13.5px; color: var(--muted); line-height: 1.6; }
+
+  /* ── MODULE MAP ───────────────────────────── */
+  .module-map {
+    background: var(--navy);
+    border-radius: 20px;
+    padding: 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+  }
+  .mod-chip {
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 10px;
+    padding: 16px 18px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .mod-chip-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .mod-chip span {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px; font-weight: 600;
+    color: rgba(255,255,255,.88);
+  }
+
+  /* ── BRIDGE TABLE ─────────────────────────── */
+  .bridge-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid #E3EAF5;
+  }
+  .bridge-row:last-child { border-bottom: none; }
+  .bridge-label {
+    font-size: 14px; font-weight: 500; color: var(--text);
+  }
+  .bridge-arrow {
+    color: var(--teal); font-size: 18px; font-weight: 700;
+  }
+  .bridge-target {
+    font-size: 14px; color: var(--muted);
+    text-align: right;
+  }
+
+  /* ── INSTALL BLOCK ────────────────────────── */
+  .install-box {
+    background: var(--navy);
+    border-radius: 20px;
+    padding: 44px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .install-box h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px; font-weight: 800;
+    color: var(--white);
+    margin-bottom: 10px;
+  }
+  .install-box p { font-size: 15px; color: rgba(255,255,255,.6); max-width: 400px; }
+  .install-steps {
+    display: flex; flex-direction: column; gap: 10px;
+    min-width: 240px;
+  }
+  .install-step {
+    display: flex; align-items: flex-start; gap: 14px;
+  }
+  .step-num {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--teal);
+    color: var(--navy);
+    font-family: 'Syne', sans-serif;
+    font-size: 12px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .step-text { font-size: 13.5px; color: rgba(255,255,255,.75); line-height: 1.5; }
+
+  /* ── COMPAT ROW ───────────────────────────── */
+  .compat-row {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    margin-top: 8px;
+  }
+  .compat-chip {
+    background: var(--slate);
+    border: 1px solid #D4DFF0;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13px; font-weight: 500;
+    color: var(--navy);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .compat-chip .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); }
+
+  /* ── FOOTER ───────────────────────────────── */
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,.5);
+    text-align: center;
+    padding: 28px;
+    font-size: 13px;
+  }
+  footer strong { color: var(--teal); }
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══════════════════════════════════════ -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="badge"><span></span> Odoo 19 · Education CRM</div>
+    <h1>edu_lance —<br><em>All-in-One</em><br>Education CRM</h1>
+    <p>
+      A plug-and-play education management platform for language schools, tutoring
+      centres, and online academies. CRM pipeline, scheduling, subscriptions,
+      earnings — one module, zero extra dependencies.
+    </p>
+    <div class="pill-row">
+      <div class="pill">🎓 Student & Teacher Management</div>
+      <div class="pill">📅 Group Scheduling</div>
+      <div class="pill">💳 Subscription Engine</div>
+      <div class="pill">📊 Earnings & Payouts</div>
+      <div class="pill">🔌 YooKassa Ready</div>
+      <div class="pill">🌐 Portal Access</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FEATURES ══════════════════════════════════ -->
+<div class="section">
+  <div class="section__inner">
+    <div class="section-label">What's inside</div>
+    <h2 class="section-title">Everything a school needs, nothing it doesn't</h2>
+    <p class="section-sub">
+      edu_lance ships 21 models covering the full student lifecycle — from first
+      enquiry to certificate and payout.
+    </p>
+
+    <div class="feat-grid">
+
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#E8F9F8;">🎯</div>
+        <h3>CRM Pipeline</h3>
+        <p>6 configurable stages from New Lead to Churned. Track enquiries, trial lessons, and conversion rates in a Kanban view.</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#FFF5E0;">👨‍🎓</div>
+        <h3>Students & Teachers</h3>
+        <p>Profiles linked to <code>res.partner</code>. CEFR level, subject, timezone, placement test flag, email verification — all built in.</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#EEF2FF;">📚</div>
+        <h3>Curriculum</h3>
+        <p>CEFR levels (A1–C2 + custom) and subjects are fully admin-editable. Link to <code>slide.channel</code> for in-app lesson content.</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#E8F9F8;">🗓️</div>
+        <h3>Group Classes & Sessions</h3>
+        <p>Create groups, schedule sessions, track attendance. Auto write-off on checkout — absentees lose credits automatically.</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#FFF5E0;">📝</div>
+        <h3>Homework</h3>
+        <p>Assign tasks per session or group. Students submit answers via portal. Teachers mark complete and add feedback.</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#EEF2FF;">💳</div>
+        <h3>Subscriptions</h3>
+        <p>Three billing models: per-lesson credit packs, hourly bundles, or season passes with fixed expiry. Auto-compute on create.</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#E8F9F8;">📁</div>
+        <h3>Resource Bank</h3>
+        <p>Upload PDFs, videos, or external links. Tag by level and subject. Students access via portal; teachers manage in back-end.</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#FFF5E0;">💰</div>
+        <h3>Teacher Earnings</h3>
+        <p>Rate cards per level/subject. Earnings auto-calculated per session. Batch payout with one-click approval workflow.</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#EEF2FF;">🔄</div>
+        <h3>Migration Wizard</h3>
+        <p>Migrate existing data from <code>nexus_wallet</code>, <code>slide.channel</code>, and <code>hr.employee</code> teachers in a guided wizard.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODULE MAP ═══════════════════════════════ -->
+<div class="section section--slate">
+  <div class="section__inner">
+    <div class="section-label">Architecture</div>
+    <h2 class="section-title">21 models, 9 sub-packages</h2>
+    <p class="section-sub">Clean separation of concerns. Each domain lives in its own sub-package for easy extension.</p>
+
+    <div class="module-map">
+      <div class="mod-chip"><div class="mod-chip-dot" style="background:#00BCB4;"></div><span>crm</span></div>
+      <div class="mod-chip"><div class="mod-chip-dot" style="background:#FFB400;"></div><span>people</span></div>
+      <div class="mod-chip"><div class="mod-chip-dot" style="background:#7C6BFF;"></div><span>curriculum</span></div>
+      <div class="mod-chip"><div class="mod-chip-dot" style="background:#00BCB4;"></div><span>classes</span></div>
+      <div class="mod-chip"><div class="mod-chip-dot" style="background:#FFB400;"></div><span>homework</span></div>
+      <div class="mod-chip"><div class="mod-chip-dot" style="background:#7C6BFF;"></div><span>subscriptions</span></div>
+      <div class="mod-chip"><div class="mod-chip-dot" style="background:#00BCB4;"></div><span>resources</span></div>
+      <div class="mod-chip"><div class="mod-chip-dot" style="background:#FFB400;"></div><span>earnings</span></div>
+      <div class="mod-chip"><div class="mod-chip-dot" style="background:#7C6BFF;"></div><span>settings</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PLUG-AND-PLAY ═════════════════════════════ -->
+<div class="section">
+  <div class="section__inner">
+    <div class="section-label">Integrations</div>
+    <h2 class="section-title">Plug-and-play bridge modules</h2>
+    <p class="section-sub">
+      edu_lance has <strong>zero hard dependencies</strong> beyond Odoo base.
+      Optional bridges extend it — install only what you need.
+    </p>
+
+    <div style="border: 1px solid #E3EAF5; border-radius: var(--radius); overflow: hidden; padding: 0 24px;">
+      <div class="bridge-row">
+        <div class="bridge-label">payment_yookassa_widget</div>
+        <div class="bridge-arrow">→</div>
+        <div class="bridge-target">Russian YooKassa payments on subscriptions</div>
+      </div>
+      <div class="bridge-row">
+        <div class="bridge-label">nexus_vr</div>
+        <div class="bridge-arrow">→</div>
+        <div class="bridge-target">BigBlueButton / Nexus Virtual Room video sessions</div>
+      </div>
+      <div class="bridge-row">
+        <div class="bridge-label">nexus_zoom</div>
+        <div class="bridge-arrow">→</div>
+        <div class="bridge-target">Zoom meeting links on sessions</div>
+      </div>
+      <div class="bridge-row">
+        <div class="bridge-label">slide.channel (built-in eLearning)</div>
+        <div class="bridge-arrow">→</div>
+        <div class="bridge-target">CEFR level linked to in-app course content</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ INSTALL ═══════════════════════════════════ -->
+<div class="section section--slate">
+  <div class="section__inner">
+    <div class="install-box">
+      <div>
+        <h2>Ready in minutes</h2>
+        <p>Install from the Apps Store, configure levels and subjects, and start adding students. Seed data is included.</p>
+        <br/>
+        <div class="compat-row">
+          <div class="compat-chip"><span class="dot"></span> Odoo 19 (Community &amp; Enterprise)</div>
+          <div class="compat-chip"><span class="dot"></span> Python 3.12</div>
+          <div class="compat-chip"><span class="dot"></span> PostgreSQL 14+</div>
+        </div>
+      </div>
+      <div class="install-steps">
+        <div class="install-step">
+          <div class="step-num">1</div>
+          <div class="step-text">Install <strong style="color:#fff">edu_lance</strong> from Apps</div>
+        </div>
+        <div class="install-step">
+          <div class="step-num">2</div>
+          <div class="step-text">Edit levels &amp; subjects in<br/><strong style="color:#fff">EduLance → Configuration</strong></div>
+        </div>
+        <div class="install-step">
+          <div class="step-num">3</div>
+          <div class="step-text">Add teachers, students,<br/>create your first group</div>
+        </div>
+        <div class="install-step">
+          <div class="step-num">4</div>
+          <div class="step-text">Run migration wizard if<br/>upgrading from nexus_wallet</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FOOTER ════════════════════════════════════ -->
+<footer>
+  <strong>edu_lance</strong> v19.0.1.0.0 &nbsp;·&nbsp;
+  Developed by <strong>Databulance</strong> · Pokrovsk, Sakha Republic, Russia &nbsp;·&nbsp;
+  Licensed under LGPL-3
+</footer>
+
+</body>
+</html>
